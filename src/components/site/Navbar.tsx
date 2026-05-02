@@ -1,80 +1,70 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, Home, Box, Monitor } from "lucide-react";
 import logo from "@/assets/brand/aditya-logo.png";
 
 const links = [
-  { to: "/", label: "Home" },
-  { to: "/products", label: "Products" },
-  { to: "/products/silent-62-5", label: "Showcase" },
+  { to: "/", label: "Welcome", icon: Home },
+  { to: "/products", label: "Products", icon: Box },
 ];
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [isPresentMode, setIsPresentMode] = useState(false);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const onDark = pathname === "/" || pathname === "/welcome";
 
+  // Close mobile menu on route change
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => { 
-    setOpen(false); 
-    setProfileOpen(false);
+    setOpen(false);
   }, [pathname]);
 
-  // Close profile dropdown when clicking outside
+  // Listen for ESC key to exit present mode
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (profileOpen && !target.closest('.profile-dropdown')) {
-        setProfileOpen(false);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsPresentMode(false);
       }
     };
-    
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [profileOpen]);
+    if (isPresentMode) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isPresentMode]);
 
-  const solid = scrolled || !onDark || open;
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setProfileOpen(false);
-    navigate("/login");
-  };
+  // If Present Mode is active, hide everything except the ESC button
+  if (isPresentMode) {
+    return (
+      <button
+        onClick={() => setIsPresentMode(false)}
+        className="fixed top-6 right-6 z-[100] flex items-center gap-2 rounded-full bg-black/60 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-black/80 hover:scale-105"
+      >
+        <span>ESC to Exit</span>
+        <X size={16} />
+      </button>
+    );
+  }
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-4 z-50 transition-all duration-500 ease-brand px-4 sm:px-8 flex justify-center pointer-events-none"
-      )}
-    >
-      <div
-        className={cn(
-          "w-full max-w-5xl rounded-full transition-all duration-500 ease-brand pointer-events-auto",
-          solid
-            ? "bg-white/95 backdrop-blur shadow-[0_8px_30px_-12px_rgba(11,58,92,0.3)] border border-white/20"
-            : "bg-white/5 backdrop-blur-md border border-white/10"
-        )}
-      >
-        <div className="flex h-16 items-center justify-between px-6">
-          <Link to="/" className="flex items-center gap-2 group">
-            <img
-              src={logo}
-              alt="Aditya"
-              className={cn("h-8 w-auto transition-all duration-500 ease-brand group-hover:scale-105", !solid && onDark ? "brightness-0 invert" : "")}
-            />
-          </Link>
+    <>
+      {/* Mobile Top Bar */}
+      <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-border bg-white px-6 shadow-sm md:hidden">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="Aditya" className="h-8 w-auto" />
+        </Link>
+        <button
+          aria-label="Toggle menu"
+          onClick={() => setOpen((v) => !v)}
+          className="text-foreground transition-colors hover:text-accent"
+        >
+          {open ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </header>
 
-          <nav className="hidden items-center gap-8 md:flex">
+      {/* Mobile Menu Dropdown */}
+      {open && (
+        <div className="fixed inset-x-0 top-16 z-40 border-b border-border bg-white p-4 shadow-xl animate-fade-in md:hidden">
+          <nav className="flex flex-col gap-2">
             {links.map((l) => (
               <NavLink
                 key={l.to}
@@ -82,81 +72,128 @@ export function Navbar() {
                 end={l.to === "/"}
                 className={({ isActive }) =>
                   cn(
-                    "relative text-sm font-medium transition-all duration-300 hover:text-accent hover:scale-105 active:scale-95",
-                    solid ? "text-foreground/80" : "text-white/80 hover:text-white",
-                    "after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-500 after:ease-brand hover:after:scale-x-100",
-                    isActive && (solid ? "text-foreground after:scale-x-100" : "text-white after:scale-x-100"),
+                    "flex items-center gap-3 rounded-full px-5 py-3.5 text-sm font-medium transition-all",
+                    isActive
+                      ? "bg-brand-navy text-white"
+                      : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                   )
                 }
               >
-                {l.label}
+                {({ isActive }) => (
+                  <>
+                    <l.icon size={18} className={isActive ? "text-accent" : ""} />
+                    {l.label}
+                  </>
+                )}
               </NavLink>
             ))}
-            
-            {/* Profile Dropdown */}
-            <div className="relative profile-dropdown">
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className={cn(
-                  "flex items-center gap-2 text-sm font-medium transition-all duration-300 hover:text-accent hover:scale-105 active:scale-95",
-                  solid ? "text-foreground/80" : "text-white/80 hover:text-white"
-                )}
-              >
-                <User size={18} />
-                <span>Profile</span>
-              </button>
-              
-              {profileOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg border border-border/20 overflow-hidden animate-fade-in-soft">
-                  <button
-                    onClick={handleLogout}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-foreground/80 hover:bg-accent/10 hover:text-accent transition-colors"
-                  >
-                    <LogOut size={16} />
-                    <span>Logout</span>
-                  </button>
-                </div>
-              )}
-            </div>
+
+            {/* Mobile Present Mode Button */}
+            <button
+              onClick={() => {
+                setIsPresentMode(true);
+                setOpen(false);
+              }}
+              className="mt-2 flex items-center gap-3 rounded-full px-5 py-3.5 text-sm font-medium text-muted-foreground transition-all hover:bg-secondary/80 hover:text-foreground"
+            >
+              <Monitor size={18} />
+              Present
+            </button>
           </nav>
-
-          <button
-            aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
-            className={cn("md:hidden transition-colors", solid ? "text-foreground" : "text-white")}
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
+      )}
 
-        {open && (
-          <div className="md:hidden border-t border-border/10 bg-white/95 backdrop-blur rounded-b-3xl animate-fade-in-soft overflow-hidden">
-            <div className="flex flex-col py-4 px-6">
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.to === "/"}
-                  className={({ isActive }) =>
-                    cn("py-3 text-sm font-medium border-b border-border/5 last:border-0 text-foreground/80", isActive && "text-accent font-bold")
-                  }
-                >
-                  {l.label}
-                </NavLink>
-              ))}
-              
-              {/* Mobile Profile with Logout */}
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 py-3 text-sm font-medium text-foreground/80 hover:text-accent transition-colors"
-              >
-                <LogOut size={16} />
-                <span>Logout</span>
-              </button>
-            </div>
-          </div>
-        )}
+      {/* Desktop Independent Logo (Top Left) */}
+      <div className="fixed top-2 left-2 z-50 hidden md:block">
+        <Link to="/" className="group inline-block rounded-md bg-white/40 p-2 backdrop-blur-md transition-all duration-300 hover:bg-white/80 hover:shadow-lg">
+          <img
+            src={logo}
+            alt="Aditya"
+            className="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        </Link>
       </div>
-    </header>
+
+      {/* Desktop Floating Navigation Group (Vertically Centered) */}
+      <div className="fixed top-1/2 left-2 z-50 hidden -translate-y-1/2 flex-col gap-4 md:flex">
+        
+        {/* Present Mode Pill */}
+        <aside
+          className={cn(
+            "group flex flex-col overflow-hidden rounded-[32px] border border-border bg-white/90 p-3 shadow-[0_8px_32px_rgba(11,58,92,0.12)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "w-max min-w-[72px]"
+          )}
+        >
+          <button
+            onClick={() => setIsPresentMode(true)}
+            className={cn(
+              "relative flex h-12 w-full items-center rounded-[24px] text-sm font-bold transition-all duration-300",
+              "text-muted-foreground hover:bg-brand-navy hover:text-white hover:shadow-md hover:scale-[1.02]",
+              "justify-center group-hover:justify-start group-hover:px-5"
+            )}
+          >
+            <Monitor
+              size={18}
+              className="shrink-0 transition-transform duration-300 group-hover:scale-110"
+            />
+            <div
+              className={cn(
+                "overflow-hidden whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                "max-w-0 opacity-0 group-hover:ml-4 group-hover:max-w-[150px] group-hover:opacity-100"
+              )}
+            >
+              Present
+            </div>
+          </button>
+        </aside>
+
+        {/* Main Floating Icon-Only Hover Sidebar */}
+        <aside
+          className={cn(
+            "group flex flex-col overflow-hidden rounded-[32px] border border-border bg-white/90 p-3 shadow-[0_8px_32px_rgba(11,58,92,0.12)] backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "w-max min-w-[72px]"
+          )}
+        >
+          <nav className="flex flex-col gap-2">
+            {links.map((l) => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === "/"}
+                className={({ isActive }) =>
+                  cn(
+                    "relative flex h-12 w-full items-center rounded-[24px] text-sm font-bold transition-all duration-300",
+                    isActive
+                      ? "bg-brand-navy text-white shadow-md shadow-brand-navy/20"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground hover:scale-[1.02]",
+                    "justify-center group-hover:justify-start group-hover:px-5"
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <l.icon
+                      size={18}
+                      className={cn(
+                        "shrink-0 transition-transform duration-300",
+                        isActive ? "text-accent" : ""
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        "overflow-hidden whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                        "max-w-0 opacity-0 group-hover:ml-4 group-hover:max-w-[120px] group-hover:opacity-100"
+                      )}
+                    >
+                      {l.label}
+                    </div>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </aside>
+      </div>
+    </>
   );
 }

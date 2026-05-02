@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import type { ProductSummary } from "@/data/products";
 import { ArrowRight } from "lucide-react";
+import { SmoothImage } from "@/components/ui/SmoothImage";
 
 interface Props {
   product: ProductSummary;
@@ -17,11 +18,12 @@ export function ProductCard({ product }: Props) {
       )}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        <img
+        <SmoothImage
           src={product.thumbnail}
           alt={product.name}
           loading="lazy"
-          className={cn(
+          wrapperClassName="h-full w-full"
+          imageClassName={cn(
             "h-full w-full object-cover transition-transform duration-1000 ease-brand",
             isActive ? "group-hover:scale-110" : "grayscale",
           )}

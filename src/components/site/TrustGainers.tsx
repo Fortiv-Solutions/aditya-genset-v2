@@ -1,40 +1,102 @@
-import { SectionReveal } from "./SectionReveal";
-import { Award, Sparkles, HeartHandshake } from "lucide-react";
+import { SectionReveal, StaggerReveal } from "./SectionReveal";
+import { Award, Clock, Truck, Handshake, Leaf, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 const ITEMS = [
-  { icon: Award, title: "Value for Money", body: "Engineered for total cost of ownership — not just sticker price." },
-  { icon: Sparkles, title: "Excellence in Service", body: "Direct factory support, rapid response, and lifetime relationships." },
-  { icon: HeartHandshake, title: "100% Satisfaction", body: "Trusted by Indian Railways, Indian Army, Amazon and 500+ enterprises." },
+  { icon: Award, title: "ISO 9001:2015", body: "Certified for highest quality standards." },
+  { icon: Clock, title: "25+ Years Experience", body: "Industry expertise since 1997." },
+  { icon: Truck, title: "Nationwide Delivery", body: "Strong logistics network across India." },
+  { icon: Handshake, title: "Trusted OEM Partnerships", body: "Tied up with Escorts-Kubota & Baudouin." },
+  { icon: Leaf, title: "Silent & Eco-Friendly", body: "CPCB IV+ compliant sustainable technology." },
+  { icon: ShieldCheck, title: "Trusted By Leaders", body: "Indian Railways, Army, Amazon & more." },
 ];
 
 export function TrustGainers() {
   return (
-    <section className="relative overflow-hidden bg-hero-gradient py-24 text-white md:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute top-10 right-10 h-72 w-72 rounded-full bg-accent blur-3xl animate-float-slow" />
-        <div className="absolute bottom-10 left-10 h-80 w-80 rounded-full bg-white blur-3xl animate-float-slower" />
+    <section className="relative flex min-h-screen snap-center flex-col justify-center overflow-hidden bg-brand-navy pt-16 text-white md:pt-0">
+      {/* ─── Premium Industrial Background ─── */}
+      <div className="pointer-events-none absolute inset-0 select-none">
+        {/* Animated Grid Overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.08]" 
+          style={{ 
+            backgroundImage: `linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }}
+        />
+        
+        {/* Large Decorative Text Watermark */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-bold leading-none text-white/[0.02] tracking-tighter uppercase whitespace-nowrap select-none">
+          EXCELLENCE
+        </div>
+
+        {/* Cinematic Lighting Blobs */}
+        <motion.div 
+          animate={{ 
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 -left-20 h-[500px] w-[500px] rounded-full bg-accent/20 blur-[120px]" 
+        />
+        <motion.div 
+          animate={{ 
+            x: [0, -40, 0],
+            y: [0, 60, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-1/4 -right-20 h-[600px] w-[600px] rounded-full bg-white/10 blur-[150px]" 
+        />
+        
+        {/* Noise Texture */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay" />
       </div>
 
-      <div className="container-x relative">
-        <SectionReveal className="text-center">
-          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Why Choose Us</div>
-          <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl">
-            We Are The <span className="text-accent">Trust Gainers</span>
+      <div className="container-x relative z-10">
+        <SectionReveal className="text-center" variant="fadeUp">
+          <div className="font-display text-xs uppercase tracking-[0.4em] text-accent font-semibold">Our Strengths</div>
+          <h2 className="mt-4 w-fit font-display text-5xl font-bold md:text-6xl tracking-tight heading-underline heading-underline-center mx-auto">
+            Why Choose Us
           </h2>
         </SectionReveal>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
-          {ITEMS.map((it, i) => (
-            <SectionReveal key={it.title} delay={i * 120}>
-              <div className="group relative h-full overflow-hidden rounded-sm border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-500 ease-brand hover:-translate-y-2 hover:border-accent/60 hover:bg-white/10">
-                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-sm bg-amber-gradient text-foreground transition-transform duration-500 ease-brand group-hover:rotate-6 group-hover:scale-110">
-                  <it.icon size={26} strokeWidth={2} />
-                </div>
-                <h3 className="font-display text-xl font-bold">{it.title}</h3>
-                <p className="mt-3 text-sm text-white/80">{it.body}</p>
-              </div>
-            </SectionReveal>
-          ))}
+        <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {ITEMS.map((it, i) => {
+            let variant: "slideLeft" | "slideRight" | "fadeDown" | "fadeUp" = "fadeUp";
+            if (i % 3 === 0) variant = "slideLeft";
+            else if (i % 3 === 2) variant = "slideRight";
+            else variant = i < 3 ? "fadeDown" : "fadeUp";
+
+            return (
+              <SectionReveal
+                key={it.title}
+                variant={variant}
+                delay={i * 100}
+                threshold={0.1}
+              >
+                <motion.div
+                  whileHover={{ y: -12, scale: 1.01 }}
+                  className="group relative flex flex-col h-full overflow-hidden rounded-sm border border-white/10 bg-white/[0.03] p-8 backdrop-blur-md transition-all duration-500 hover:border-accent/40 hover:bg-white/[0.08] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
+                >
+                  {/* Corner Accent */}
+                  <div className="absolute top-0 left-0 h-1 w-0 bg-accent transition-all duration-500 group-hover:w-full" />
+                  
+                  <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-sm bg-accent text-brand-navy shadow-[0_0_20px_rgba(242,169,0,0.3)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-white">
+                    <it.icon size={26} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="font-display text-xl font-bold tracking-tight text-white group-hover:text-accent transition-colors duration-300">{it.title}</h3>
+                  <p className="mt-3 text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors duration-300">{it.body}</p>
+                  
+                  {/* Decorative Number Background */}
+                  <div className="absolute -bottom-4 -right-4 text-8xl font-bold text-white/[0.03] transition-all duration-500 group-hover:text-accent/[0.05] group-hover:scale-110">
+                    <it.icon size={120} />
+                  </div>
+                </motion.div>
+              </SectionReveal>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -9,7 +9,13 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {!isLoginPage && <Navbar />}
-      <main className={isLoginPage ? "" : "pt-[88px]"}>{children}</main>
+      {/* 
+        On mobile: add top padding for the fixed mobile header (pt-16)
+        On desktop: no extra space. Content spans full width underneath the floating nav (md:pt-0 md:pl-0)
+      */}
+      <main className={isLoginPage ? "" : "pt-16 md:pt-0 md:pl-0"}>
+        {children}
+      </main>
     </div>
   );
 }

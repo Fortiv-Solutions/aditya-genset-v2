@@ -1,38 +1,44 @@
-import { SectionReveal } from "./SectionReveal";
+import { SectionReveal, StaggerReveal } from "./SectionReveal";
+import { motion } from "framer-motion";
 
 const PARTNERS = [
-  { name: "Escorts Kubota", tag: "Engine Partner" },
+  { name: "Escorts-Kubota", tag: "Authorized OEM" },
   { name: "Baudouin", tag: "Engine Partner" },
-  { name: "Stamford", tag: "Alternator" },
-  { name: "Leroy Somer", tag: "Alternator" },
-  { name: "Deepsea", tag: "Controller" },
-  { name: "ComAp", tag: "Controller" },
+  { name: "Kohler", tag: "Engine Partner" },
 ];
 
 export function OEMPartners() {
   return (
-    <section className="relative bg-white py-20 md:py-28">
+    <section className="relative flex min-h-screen snap-center flex-col justify-center bg-secondary/30 pt-16 md:pt-0">
       <div className="container-x">
-        <SectionReveal className="text-center">
-          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Built With The Best</div>
-          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl heading-underline inline-block">
+        <SectionReveal className="text-center" variant="fadeUp">
+          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Engine Partners</div>
+          <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl heading-underline heading-underline-center inline-block">
             Our OEM Partners
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-muted-foreground">
-            We engineer with world-class OEMs to deliver dependable, certified power.
-          </p>
         </SectionReveal>
 
-        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-14 grid gap-6 sm:grid-cols-3 max-w-5xl mx-auto">
           {PARTNERS.map((p, i) => (
-            <SectionReveal key={p.name} delay={i * 80}>
-              <div className="group relative aspect-[3/2] overflow-hidden rounded-sm border border-border bg-secondary/40 p-4 transition-all duration-500 ease-brand hover:-translate-y-1 hover:border-accent hover:bg-white hover:shadow-lg">
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-accent/10 to-transparent transition-transform duration-700 ease-brand group-hover:translate-x-full" />
+            <SectionReveal 
+              key={p.name} 
+              variant={i === 0 ? "slideLeft" : i === 2 ? "slideRight" : "fadeUp"} 
+              delay={i * 100}
+              threshold={0.1}
+            >
+              <motion.div
+                whileHover={{ y: -10, scale: 1.02, rotate: i === 0 ? -1 : i === 2 ? 1 : 0 }}
+                className="group relative aspect-[3/2] overflow-hidden rounded-sm border border-border bg-white p-6 transition-shadow duration-500 hover:border-accent hover:shadow-[0_20px_50px_rgba(242,169,0,0.15)]"
+              >
+                {/* Animated shimmer sweep */}
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-accent/5 to-transparent transition-transform duration-1000 ease-brand group-hover:translate-x-full" />
+                
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
-                  <div className="font-display text-base font-bold text-foreground md:text-lg">{p.name}</div>
-                  <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{p.tag}</div>
+                  <div className="mb-2 h-1 w-8 rounded-full bg-accent/20 transition-all duration-500 group-hover:w-12 group-hover:bg-accent" />
+                  <div className="font-display text-xl font-bold text-foreground md:text-2xl">{p.name}</div>
+                  <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">{p.tag}</div>
                 </div>
-              </div>
+              </motion.div>
             </SectionReveal>
           ))}
         </div>

@@ -7,6 +7,7 @@ import { CountUp } from "./CountUp";
 import { cn } from "@/lib/utils";
 import { Maximize2, Minimize2, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { GuidedPresentation } from "./GuidedPresentation";
+import { SmoothImage } from "@/components/ui/SmoothImage";
 
 interface Props { product: ShowcaseProduct; }
 
@@ -65,10 +66,11 @@ export function ScrollStory({ product }: Props) {
               {active === 0 ? (
                 <div className="relative aspect-square w-full overflow-visible">
                   <div className="relative w-full h-full flex items-center justify-center">
-                    <img 
+                    <SmoothImage 
                       src={product.sections[0].image} 
-                      alt={product.sections[0].alt} 
-                      className="w-[120%] h-[120%] object-contain transition-all duration-700" 
+                      alt={product.sections[0].alt}
+                      wrapperClassName="w-full h-full absolute inset-0 bg-transparent" 
+                      imageClassName="w-[120%] h-[120%] object-contain transition-all duration-700" 
                     />
                   </div>
                 </div>
@@ -108,7 +110,7 @@ export function ScrollStory({ product }: Props) {
             className="py-12 border-b border-border last:border-0"
           >
             <div className="mb-6 aspect-square overflow-hidden rounded-sm bg-muted">
-              <img src={s.image} alt={s.alt} loading="lazy" className="h-full w-full object-cover" />
+              <SmoothImage src={s.image} alt={s.alt} loading="lazy" wrapperClassName="h-full w-full" imageClassName="h-full w-full object-cover" />
             </div>
             <SectionContent section={s} active />
           </article>
@@ -127,10 +129,11 @@ export function ScrollStory({ product }: Props) {
                 className="group relative h-16 w-24 overflow-hidden rounded-lg bg-muted transition-all duration-500 hover:ring-2 hover:ring-accent hover:ring-offset-2 active:scale-95"
                 title={s.title}
               >
-                <img 
+                <SmoothImage 
                   src={s.image} 
-                  alt={s.alt} 
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100" 
+                  alt={s.alt}
+                  wrapperClassName="absolute inset-0" 
+                  imageClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100" 
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-display text-[10px] font-bold text-white drop-shadow-md">{s.number}</span>

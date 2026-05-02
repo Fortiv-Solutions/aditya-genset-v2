@@ -56,6 +56,9 @@ export default {
           "0%": { transform: "scale(1)", opacity: "0.7" },
           "100%": { transform: "scale(2.4)", opacity: "0" },
         },
+        "shimmer": {
+          "100%": { transform: "translateX(100%)" }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -66,6 +69,7 @@ export default {
         "slide-up": "slide-up 0.7s cubic-bezier(0.22,1,0.36,1) both",
         "marquee": "marquee 32s linear infinite",
         "ping-soft": "ping-soft 2.2s cubic-bezier(0,0,0.2,1) infinite",
+        "shimmer": "shimmer 1.5s infinite",
       },
     },
   },

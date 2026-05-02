@@ -97,6 +97,10 @@
     scroll-behavior: smooth;
   }
 
+  html.snap-container {
+    scroll-snap-type: y mandatory;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
@@ -171,6 +175,9 @@
     margin-top: 12px;
     background: hsl(var(--brand-amber));
     border-radius: 2px;
+  }
+  .heading-underline-center::after {
+    margin-inline: auto;
   }
 
   /* Reveal-on-scroll variants */

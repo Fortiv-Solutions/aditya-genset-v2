@@ -1,79 +1,87 @@
 import { Link } from "react-router-dom";
 import { SectionReveal } from "./SectionReveal";
-import { ArrowRight } from "lucide-react";
-import dgImg from "@/assets/brand/dg-real-1.png";
+import { ChevronRight, Zap, Box } from "lucide-react";
+import { motion } from "framer-motion";
+import dgProduct from "@/assets/brand/dg-product.jpg";
 import containerImg from "@/assets/brand/container.png";
-import nonStandard from "@/assets/brand/non-standard.jpeg";
 
 const CATEGORIES = [
   {
-    title: "Diesel Generators",
-    desc: "Silent DG sets from 15 to 500 kVA. CPCB IV+ compliant.",
-    image: dgImg,
+    title: "DG SETS",
+    desc: "High-performance diesel generator sets for industrial and commercial power..",
+    icon: Zap,
+    image: dgProduct,
     href: "/products",
-    badge: "36+ Models",
   },
   {
-    title: "Non-Standard Containers",
-    desc: "Custom acoustic enclosures and weather-proof container builds.",
+    title: "NON STANDARD",
+    desc: "Customized containers and specialized enclosures tailored to unique..",
+    icon: Box,
     image: containerImg,
     href: "/products",
-    badge: "Custom Build",
-  },
-  {
-    title: "Containerized DG Sets",
-    desc: "Plug-and-play containerized power for sites and projects.",
-    image: nonStandard,
-    href: "/products",
-    badge: "Project Power",
   },
 ];
 
 export function ProductCategories() {
   return (
-    <section className="relative bg-white py-24 md:py-32">
+    <section className="relative flex min-h-screen snap-center flex-col justify-center bg-white py-20">
       <div className="container-x">
-        <SectionReveal>
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Our Products</div>
-              <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl heading-underline">
-                Power, in every form factor.
-              </h2>
-            </div>
-            <Link to="/products" className="hidden text-sm font-semibold text-accent hover:underline md:inline-flex items-center gap-1">
-              View all products <ArrowRight size={14} />
-            </Link>
-          </div>
+        <SectionReveal variant="fadeUp" className="text-center mb-16">
+          <div className="font-display text-[10px] font-black uppercase tracking-[0.4em] text-accent">Official Range</div>
+          <h2 className="mt-4 font-display text-5xl font-black text-foreground md:text-6xl">
+            Our Products
+          </h2>
+          <p className="mt-6 mx-auto max-w-lg text-sm font-medium leading-relaxed text-muted-foreground uppercase tracking-wider">
+            Select a category to explore our comprehensive range of power solutions and customized enclosures.
+          </p>
         </SectionReveal>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {CATEGORIES.map((c, i) => (
-            <SectionReveal key={c.title} delay={i * 120}>
-              <Link
-                to={c.href}
-                className="group relative block h-full overflow-hidden rounded-sm border border-border bg-secondary/30 transition-all duration-500 ease-brand hover:-translate-y-2 hover:border-accent hover:shadow-2xl"
+        <div className="grid gap-8 md:grid-cols-2">
+          {CATEGORIES.map((cat, i) => (
+            <SectionReveal
+              key={cat.title}
+              variant={i % 2 === 0 ? "slideLeft" : "slideRight"}
+              delay={i * 150}
+              className="h-full"
+            >
+              <motion.div
+                whileHover={{ y: -10 }}
+                className="h-full"
               >
-                <div className="relative aspect-[5/4] overflow-hidden bg-white">
-                  <img
-                    src={c.image}
-                    alt={c.title}
-                    loading="lazy"
-                    className="h-full w-full object-contain p-6 transition-transform duration-700 ease-brand group-hover:scale-110"
-                  />
-                  <div className="absolute left-4 top-4 rounded-sm bg-amber-gradient px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-foreground">
-                    {c.badge}
+                <Link
+                  to={cat.href}
+                  className="group relative flex flex-col h-full min-h-[480px] overflow-hidden rounded-[2.5rem] bg-[#F8F8F8] p-10 transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)]"
+                >
+                  {/* Image Container */}
+                  <div className="absolute top-10 right-10 w-2/3 h-64 transition-transform duration-700 group-hover:scale-105 group-hover:-translate-y-2">
+                    <img 
+                      src={cat.image} 
+                      alt={cat.title} 
+                      className="h-full w-full object-contain drop-shadow-2xl"
+                    />
                   </div>
-                </div>
-                <div className="border-t border-border bg-white p-6">
-                  <h3 className="font-display text-xl font-bold">{c.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-                    View Products
-                    <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+
+                  {/* Content (Bottom Left) */}
+                  <div className="mt-auto relative z-10 flex flex-col items-start text-left">
+                    {/* Icon Box */}
+                    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-xl transition-all duration-500 group-hover:bg-accent group-hover:text-black">
+                      <cat.icon size={24} strokeWidth={2.5} />
+                    </div>
+                    
+                    <h3 className="font-display text-4xl font-black text-foreground tracking-tighter uppercase mb-3">
+                      {cat.title}
+                    </h3>
+                    
+                    <p className="text-sm font-medium text-muted-foreground max-w-[280px] mb-8 leading-relaxed">
+                      {cat.desc}
+                    </p>
+                    
+                    <div className="flex items-center gap-2 text-sm font-black text-foreground uppercase tracking-widest group-hover:text-accent transition-colors duration-300">
+                      Select Category <ChevronRight size={18} strokeWidth={3} className="transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             </SectionReveal>
           ))}
         </div>

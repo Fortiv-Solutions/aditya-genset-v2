@@ -5,7 +5,7 @@ export default function Welcome() {
   return (
     <>
       <SEO title="Welcome — Adityagenset" description="Step into Adityagenset — silent power, since 1997." />
-      <section className="-mt-16 flex min-h-screen items-center justify-center bg-foreground text-background">
+      <section className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-foreground text-background">
         <div className="container-x text-center">
           <div className="mx-auto mb-10 flex items-center justify-center gap-3 animate-fade-in">
             <span className="h-2 w-2 rounded-full bg-accent" />

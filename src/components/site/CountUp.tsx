@@ -12,15 +12,22 @@ interface Props {
 }
 
 export function CountUp({ end, duration = 1200, suffix = "", prefix = "", decimals = 0, className }: Props) {
-  const { ref, inView } = useInView<HTMLSpanElement>();
+  const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0.1 }, false);
   const [val, setVal] = useState(0);
   const started = useRef(false);
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    if (!inView || started.current) return;
+    if (!inView) {
+      started.current = false;
+      setVal(0);
+      return;
+    }
+    if (started.current) return;
+    
     started.current = true;
     if (reduced) { setVal(end); return; }
+    
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);

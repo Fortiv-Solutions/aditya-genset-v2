@@ -1,22 +1,12 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { SEO } from "@/components/site/SEO";
 import { SHOWCASE } from "@/data/products";
 import { ScrollStory } from "@/components/site/ScrollStory";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { ArrowLeft, Download, Mail } from "lucide-react";
+import { ArrowLeft, Monitor } from "lucide-react";
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const [showCta, setShowCta] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setShowCta(window.scrollY > 600);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const navigate = useNavigate();
 
   if (slug !== SHOWCASE.slug) {
     return (
@@ -47,24 +37,35 @@ export default function ProductDetail() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <section className="container-x pt-12 pb-8">
-        <Link to="/products" className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground story-link">
+        <Link
+          to="/products"
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground story-link"
+        >
           <ArrowLeft size={12} /> All products
         </Link>
+
         <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Showcase</div>
-            <h1 className="mt-3 font-display text-5xl font-semibold leading-none md:text-6xl">{SHOWCASE.name}</h1>
-            <p className="mt-3 max-w-xl text-muted-foreground">A 5-chapter walkthrough — scroll to explore each system.</p>
+            <h1 className="mt-3 font-display text-5xl font-semibold leading-none md:text-6xl">
+              {SHOWCASE.name}
+            </h1>
+            <p className="mt-3 max-w-xl text-muted-foreground">
+              A 6-chapter walkthrough — scroll to explore each system.
+            </p>
           </div>
-          <div className="font-display text-sm uppercase tracking-widest text-muted-foreground">
-            06 chapters · 1 product
-          </div>
+
+          <button
+            onClick={() => navigate("/products/silent-62-5")}
+            className="inline-flex items-center gap-2 rounded-md bg-foreground px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-navy-deep hover:scale-[1.03] hover:shadow-lg active:scale-95 self-end"
+          >
+            <Monitor size={16} className="shrink-0" />
+            Present Mode
+          </button>
         </div>
       </section>
 
       <ScrollStory product={SHOWCASE} />
-
-
     </>
   );
 }
