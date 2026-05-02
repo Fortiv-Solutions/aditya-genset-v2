@@ -1,17 +1,35 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Lock, Mail, Store } from "lucide-react";
 import { SEO } from "@/components/site/SEO";
+import { toast } from "sonner";
 import factoryHero from "@/assets/brand/factory-hero.jpg";
+import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Set logged in state (you can add actual authentication logic here)
+    
+    // Check if fields are not empty
+    if (!email.trim() || !password.trim()) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+
+    // Accept any credentials
     localStorage.setItem("isLoggedIn", "true");
-    // Redirect to home
-    navigate("/");
+    localStorage.setItem("userEmail", email);
+    
+    // Show success message
+    toast.success("Login successful! Redirecting...");
+    
+    // Redirect to home after a short delay
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
   };
 
   return (
@@ -68,6 +86,9 @@ export default function Login() {
                 <input
                   type="text"
                   placeholder="Enter your credentials"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                   className="w-full pl-11 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-sm text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
                 />
               </div>
@@ -90,6 +111,9 @@ export default function Login() {
                 <input
                   type="password"
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                   className="w-full pl-11 pr-4 py-3.5 bg-black/20 border border-white/10 rounded-sm text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all shadow-inner"
                 />
               </div>
