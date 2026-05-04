@@ -117,10 +117,15 @@ const HOTSPOTS: Hotspot[] = [
   }
 ];
 
-export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { onClose: () => void, sectionId?: string }) {
+import type { ShowcaseProduct } from "@/data/products";
+
+export function GuidedPresentation({ onClose, sectionId = "showcaseData", product }: { onClose: () => void, sectionId?: string, product?: ShowcaseProduct }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
+  const presentationHotspots = product?.hotspots && product.hotspots.length > 0 ? product.hotspots : HOTSPOTS;
+  const presentationImage = product?.hero || mainImage;
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     container: wrapperRef,
@@ -141,15 +146,15 @@ export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { on
   useEffect(() => {
     const unsubscribe = scrollYProgress.onChange((v) => {
       const index = Math.min(
-        Math.floor(v * HOTSPOTS.length),
-        HOTSPOTS.length - 1
+        Math.floor(v * presentationHotspots.length),
+        presentationHotspots.length - 1
       );
       setCurrentIndex(index);
     });
     return () => unsubscribe();
-  }, [scrollYProgress]);
+  }, [scrollYProgress, presentationHotspots.length]);
 
-  const activeHotspot = HOTSPOTS[currentIndex];
+  const activeHotspot = presentationHotspots[currentIndex];
 
   return (
     <div ref={wrapperRef} className="fixed inset-0 z-[9999] overflow-y-auto bg-[#f8f9fa] pointer-events-auto">
@@ -161,26 +166,26 @@ export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { on
           >
           <motion.div
             animate={{
-              scale: activeHotspot.zoom,
-              x: `${activeHotspot.offsetX}%`,
-              y: `${activeHotspot.offsetY}%`,
+              scale: activeHotspot.zoom || 1,
+              x: `${activeHotspot.offsetX || 0}%`,
+              y: `${activeHotspot.offsetY || 0}%`,
             }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="h-full w-full flex items-center justify-center relative"
           >
             <img
-              src={mainImage}
+              src={presentationImage}
               alt="Diesel Generator"
               className="max-h-[80vh] max-w-[80vw] object-contain"
             />
 
             {/* Hotspot Dots that move with the zoom */}
-            {HOTSPOTS.map((h, i) => (
+            {presentationHotspots.map((h, i) => (
               <motion.div
                 key={h.id}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ 
-                  opacity: activeHotspot.zoom > 1.1 ? (currentIndex === i ? 1 : 0.1) : 0.8,
+                  opacity: (activeHotspot.zoom || 1) > 1.1 ? (currentIndex === i ? 1 : 0.1) : 0.8,
                   scale: currentIndex === i ? 1.3 : 0.8,
                   left: `${h.x}%`,
                   top: `${h.y}%`,
@@ -334,18 +339,18 @@ export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { on
             <AnimatePresence mode="wait">
               {activeHotspot.subImage && (
                 <motion.div
-                  key={`sub-${activeHotspot.id}`}
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                  key={activeHotspot.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: durations.slow, ease: easings.cinematic }}
-                  className="bg-white/80 backdrop-blur-2xl border border-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] rounded-3xl p-3"
+                  className="bg-white border border-border shadow-2xl rounded-3xl p-2 relative overflow-hidden group"
                 >
-                  <div className="relative aspect-video overflow-hidden rounded-2xl bg-muted">
+                  <div className="relative aspect-video rounded-2xl overflow-hidden bg-muted">
                     <motion.img 
-                      src={activeHotspot.subImage} 
-                      alt="Detail view" 
-                      className="h-full w-full object-contain"
+                      src={activeHotspot.subImage}
+                      alt={activeHotspot.title}
+                      className="w-full h-full object-cover mix-blend-multiply"
                       initial={{ scale: 1.1 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: durations.cinematic, ease: easings.cinematic }}
@@ -382,14 +387,14 @@ export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { on
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: durations.cinematic, ease: easings.cinematic, delay: 0.6 }}
         >
-          {HOTSPOTS.map((h, i) => (
+          {presentationHotspots.map((h, i) => (
             <motion.button
               key={h.id}
               onClick={() => {
                 if (!wrapperRef.current) return;
                 const scrollHeight = containerRef.current?.scrollHeight || 0;
                 const viewHeight = wrapperRef.current.clientHeight;
-                const targetScroll = (i / (HOTSPOTS.length - 1)) * (scrollHeight - viewHeight);
+                const targetScroll = (i / (presentationHotspots.length - 1)) * (scrollHeight - viewHeight);
                 wrapperRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
               }}
               className="group flex items-center justify-end gap-4 text-right"

@@ -42,6 +42,10 @@ export interface Hotspot {
   title: string;
   description: string;
   specs: SpecRow[];
+  subImage?: string;
+  zoom?: number;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface ShowcaseProduct extends ProductSummary {
@@ -61,60 +65,88 @@ export const SHOWCASE: ShowcaseProduct = {
   hero: dgOverview,
   hotspots: [
     {
-      id: "engine",
-      x: 42, y: 55,
-      title: "Turbocharged Engine",
-      description: "4-cylinder water-cooled diesel engine with electronic governor for tight load response.",
+      id: "overview",
+      x: 50, y: 50,
+      title: "Silent Diesel Generator",
+      description: "62.5 kVA silent diesel generator overview. Engineered for premium reliability and quiet operation.",
+      subImage: dgThumb,
+      zoom: 1,
+      offsetX: 0,
+      offsetY: 0,
       specs: [
-        { label: "Cylinders", value: "4 inline" },
+        { label: "Rating", value: "62.5 kVA" },
+        { label: "Phase", value: "3 Phase" },
+        { label: "Compliance", value: "CPCB IV+" }
+      ]
+    },
+    {
+      id: "engine",
+      x: 42, y: 48,
+      title: "Turbocharged Engine",
+      description: "Turbocharged 4-cylinder diesel engine. Built for continuous duty and tight load response.",
+      subImage: dgEngine,
+      zoom: 1.8,
+      offsetX: 8,
+      offsetY: 2,
+      specs: [
+        { label: "Configuration", value: "4-cylinder, inline" },
+        { label: "Aspiration", value: "Turbocharged" },
         { label: "Displacement", value: "~3.9 L" },
         { label: "Cooling", value: "Water-cooled" },
-      ],
+        { label: "Fuel", value: "High-speed diesel" }
+      ]
     },
     {
-      id: "alternator",
-      x: 25, y: 48,
-      title: "Brushless Alternator",
-      description: "High-efficiency brushless alternator delivering clean, regulated 3-phase power.",
+      id: "power",
+      x: 35, y: 55,
+      title: "Power Output",
+      description: "Industrial brushless alternator with copper windings. Clean, stable 3-phase power for sensitive loads.",
+      subImage: dgAlternator,
+      zoom: 1.6,
+      offsetX: 15,
+      offsetY: -5,
       specs: [
-        { label: "Output", value: "62.5 kVA / 50 kW" },
-        { label: "Voltage", value: "415 V, 3-phase" },
-        { label: "PF", value: "0.8 lagging" },
-      ],
+        { label: "Rating", value: "62.5 kVA / 50 kW" },
+        { label: "Voltage", value: "415 V" },
+        { label: "Frequency", value: "50 Hz" },
+        { label: "Phase", value: "3-phase, 4-wire" },
+        { label: "Power factor", value: "0.8 lagging" }
+      ]
     },
     {
-      id: "control",
-      x: 75, y: 35,
-      title: "Smart Control Panel",
-      description: "Digital controller with auto-start, fault detection, and remote monitoring readiness.",
+      id: "sound",
+      x: 65, y: 45,
+      title: "Sound & Enclosure",
+      description: "Acoustic enclosure with louvered ventilation. CPCB IV+ compliant. Engineered to disappear into its environment.",
+      subImage: dgEnclosure,
+      zoom: 1.5,
+      offsetX: -15,
+      offsetY: 5,
       specs: [
-        { label: "Display", value: "Backlit LCD" },
-        { label: "AMF", value: "Optional" },
-        { label: "Comms", value: "Modbus / RS-485" },
-      ],
-    },
-    {
-      id: "enclosure",
-      x: 85, y: 58,
-      title: "Acoustic Enclosure",
-      description: "1.6 mm CRCA panels with PU foam insulation. CPCB IV+ compliant, weather-resistant.",
-      specs: [
-        { label: "Sound", value: "75 dB(A) @ 1m" },
-        { label: "Material", value: "1.6 mm CRCA" },
+        { label: "Sound level", value: "75 dB(A) @ 1m" },
+        { label: "At 7m", value: "63 dB(A)" },
+        { label: "Construction", value: "1.6 mm CRCA panels" },
         { label: "Insulation", value: "PU foam, 50 mm" },
-      ],
+        { label: "Finish", value: "7-tank powder coat" }
+      ]
     },
     {
-      id: "fuel",
-      x: 50, y: 78,
-      title: "Integrated Fuel Tank",
-      description: "Built-in base fuel tank for extended runtime with overflow and leak protection.",
+      id: "dimensions",
+      x: 50, y: 75,
+      title: "Dimensions & Weight",
+      description: "Side profile view of silent diesel generator. Compact footprint, easy to site and service.",
+      subImage: dgDimensions,
+      zoom: 1.2,
+      offsetX: 0,
+      offsetY: -10,
       specs: [
-        { label: "Capacity", value: "230 L" },
-        { label: "Runtime", value: "~10 h @ 75% load" },
-        { label: "Material", value: "Mild steel, lined" },
-      ],
-    },
+        { label: "Length", value: "2400 mm" },
+        { label: "Width", value: "1050 mm" },
+        { label: "Height", value: "1550 mm" },
+        { label: "Dry weight", value: "~1250 kg" },
+        { label: "Wet weight", value: "~1450 kg" }
+      ]
+    }
   ],
   sections: [
     {
@@ -239,60 +271,81 @@ export const EKL15_SHOWCASE: ShowcaseProduct = {
   hero: ekl15Overview,
   hotspots: [
     {
+      id: "overview",
+      x: 50, y: 50,
+      title: "EKL 15 kVA DG Set",
+      description: "Escorts-powered 15 kVA silent generator. Compact, CPCB IV compliant — built for demanding environments.",
+      subImage: ekl15Overview,
+      zoom: 1,
+      offsetX: 0,
+      offsetY: 0,
+      specs: [
+        { label: "Rating", value: "15 kVA" },
+        { label: "Phase", value: "3 Phase" },
+        { label: "Compliance", value: "CPCB IV" }
+      ]
+    },
+    {
       id: "engine",
       x: 42, y: 55,
       title: "Escorts G15-IV Engine",
-      description: "2-cylinder, naturally aspirated, air-cooled diesel engine with electronic governor for stable frequency.",
+      description: "2-cylinder, naturally aspirated diesel engine with electronic governor for stable frequency output.",
+      subImage: ekl15Engine,
+      zoom: 1.8,
+      offsetX: 8,
+      offsetY: 2,
       specs: [
         { label: "Cylinders", value: "2 inline" },
         { label: "Displacement", value: "1.56 L" },
-        { label: "Bore × Stroke", value: "95 × 110 mm" },
-      ],
+        { label: "Speed", value: "1500 RPM" }
+      ]
     },
     {
-      id: "alternator",
+      id: "power",
       x: 25, y: 48,
       title: "Stamford Alternator",
-      description: "Brushless, self-excited single-bearing alternator with double layer concentric winding for clean power.",
+      description: "Brushless, self-excited single-bearing alternator with double layer concentric winding.",
+      subImage: ekl15Alternator,
+      zoom: 1.6,
+      offsetX: 15,
+      offsetY: -5,
       specs: [
-        { label: "Output", value: "15 kVA / 12 kWe" },
-        { label: "Voltage", value: "415 V, 3-phase" },
-        { label: "PF", value: "0.8 lagging" },
-      ],
+        { label: "Rating", value: "15 kVA / 12 kWe" },
+        { label: "Voltage", value: "415 V" },
+        { label: "Power Factor", value: "0.8 lagging" }
+      ]
     },
     {
-      id: "control",
-      x: 75, y: 35,
-      title: "DEIF SGC 120 Controller",
-      description: "Microprocessor-based digital controller with AMF, CANbus engine interface, and LCD display.",
-      specs: [
-        { label: "Make", value: "DEIF, Denmark" },
-        { label: "Model", value: "SGC 120" },
-        { label: "Comms", value: "USB / RS-485" },
-      ],
-    },
-    {
-      id: "enclosure",
+      id: "sound",
       x: 85, y: 58,
-      title: "Acoustic Enclosure",
-      description: "CPCB IV compliant acoustic enclosure — silent operation for residential and commercial sites.",
+      title: "Sound & Enclosure",
+      description: "CPCB IV compliant acoustic enclosure for silent residential and commercial operation.",
+      subImage: ekl15Overview,
+      zoom: 1.5,
+      offsetX: -15,
+      offsetY: 5,
       specs: [
-        { label: "Sound", value: "70 dB(A) @ 1m" },
+        { label: "Sound level", value: "70 dB(A) @ 1m" },
         { label: "Compliance", value: "CPCB IV" },
-        { label: "Protection", value: "IP23" },
-      ],
+        { label: "Protection", value: "IP23" }
+      ]
     },
     {
-      id: "fuel",
+      id: "dimensions",
       x: 50, y: 78,
-      title: "Fuel & Lubrication",
-      description: "High-speed diesel engine with full flow oil filter and lube oil cooling for optimum temperature control.",
+      title: "Dimensions & Weight",
+      description: "Compact open-set dimensions — easy to transport, site and service.",
+      subImage: ekl15Dimensions,
+      zoom: 1.2,
+      offsetX: 0,
+      offsetY: -10,
       specs: [
-        { label: "Fuel", value: "4.1 L/h @ 100%" },
-        { label: "Lube Oil", value: "15W40 CI4" },
-        { label: "Oil Capacity", value: "5.5 L" },
-      ],
-    },
+        { label: "Length", value: "1760 mm" },
+        { label: "Width", value: "950 mm" },
+        { label: "Height", value: "1495 mm" },
+        { label: "Dry weight", value: "~70 kg" }
+      ]
+    }
   ],
   sections: [
     {

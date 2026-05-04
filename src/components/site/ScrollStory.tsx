@@ -61,7 +61,7 @@ export const ScrollStory = forwardRef<{ enterPresentMode: () => void }, Props>((
   const prevSlide = () => setActive((prev) => (prev - 1 + product.sections.length) % product.sections.length);
 
   if (isPresenting) {
-    return <GuidedPresentation onClose={() => setIsPresenting(false)} sectionId={sectionId} />;
+    return <GuidedPresentation onClose={() => setIsPresenting(false)} sectionId={sectionId} product={product} />;
   }
 
   return (
