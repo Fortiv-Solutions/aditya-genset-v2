@@ -1,6 +1,7 @@
 import { SectionReveal } from "./SectionReveal";
 import { useState } from "react";
 import { useInView } from "@/hooks/useInView";
+import { EditableText } from "@/components/cms/EditableText";
 
 const CLIENTS = [
   {
@@ -21,11 +22,11 @@ const CLIENTS = [
   },
   {
     name: "Adani Group",
-    logo: "https://logo.clearbit.com/adani.com",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Adani_Logo.svg/500px-Adani_Logo.svg.png",
   },
   {
     name: "Larsen & Toubro",
-    logo: "https://logo.clearbit.com/larsentoubro.com",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/L%26T_logo.svg/500px-L%26T_logo.svg.png",
   },
 ];
 
@@ -73,9 +74,11 @@ export function HappyCustomers() {
     <section className="relative flex min-h-screen snap-center flex-col justify-center overflow-hidden bg-white pt-16 md:pt-0">
       <div className="container-x">
         <SectionReveal className="text-center" variant="fadeUp">
-          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Clients</div>
+          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">
+            <EditableText section="happyCustomers" contentKey="sectionLabel" />
+          </div>
           <h2 className="mt-3 w-fit font-display text-3xl font-bold md:text-4xl heading-underline heading-underline-center mx-auto">
-            Trusted Clients
+            <EditableText section="happyCustomers" contentKey="heading" />
           </h2>
         </SectionReveal>
       </div>

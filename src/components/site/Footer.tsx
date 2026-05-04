@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "@/assets/brand/aditya-logo.png";
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
+import { EditableText } from "@/components/cms/EditableText";
 
 export function Footer() {
   return (
@@ -11,7 +12,7 @@ export function Footer() {
             <img src={logo} alt="Aditya" className="h-10 w-auto" />
           </div>
           <p className="mt-5 max-w-sm text-sm text-white/70">
-            ISO 9001:2015 certified manufacturer of silent diesel generator sets, 15–500 kVA. Empowering India with uninterrupted power since 1997.
+            <EditableText section="siteFooter" contentKey="aboutText" />
           </p>
           <div className="mt-6 flex gap-3">
             {[Facebook, Instagram, Linkedin].map((Icon, i) => (
@@ -27,7 +28,9 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 font-display text-sm font-bold uppercase tracking-widest text-accent">Explore</h4>
+          <h4 className="mb-4 font-display text-sm font-bold uppercase tracking-widest text-accent">
+            <EditableText section="siteFooter" contentKey="exploreTitle" />
+          </h4>
           <ul className="space-y-2 text-sm text-white/80">
             <li><Link to="/" className="hover:text-accent transition-colors">Home</Link></li>
             <li><Link to="/about" className="hover:text-accent transition-colors">About</Link></li>
@@ -37,17 +40,28 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="mb-4 font-display text-sm font-bold uppercase tracking-widest text-accent">Contact</h4>
+          <h4 className="mb-4 font-display text-sm font-bold uppercase tracking-widest text-accent">
+            <EditableText section="siteFooter" contentKey="contactTitle" />
+          </h4>
           <ul className="space-y-3 text-sm text-white/80">
-            <li className="flex items-start gap-2"><Phone size={14} className="mt-1" /> +91 99249 68777</li>
-            <li className="flex items-start gap-2"><Mail size={14} className="mt-1" /> sales@adityagenset.com</li>
-            <li className="flex items-start gap-2"><MapPin size={14} className="mt-1" /> Silvassa, India</li>
+            <li className="flex items-start gap-2">
+              <Phone size={14} className="mt-1" /> 
+              <EditableText section="siteFooter" contentKey="phone" />
+            </li>
+            <li className="flex items-start gap-2">
+              <Mail size={14} className="mt-1" /> 
+              <EditableText section="siteFooter" contentKey="email" />
+            </li>
+            <li className="flex items-start gap-2">
+              <MapPin size={14} className="mt-1" /> 
+              <EditableText section="siteFooter" contentKey="address" />
+            </li>
           </ul>
         </div>
       </div>
       <div className="container-x flex flex-col gap-2 border-t border-white/10 py-6 text-xs text-white/60 md:flex-row md:items-center md:justify-between">
-        <span>© {new Date().getFullYear()} Aditya Tech Mech. All rights reserved.</span>
-        <span>An ISO 9001:2015 Certified Company</span>
+        <span>© {new Date().getFullYear()} <EditableText section="siteFooter" contentKey="copyrightText" /></span>
+        <span><EditableText section="siteFooter" contentKey="certificationText" /></span>
       </div>
     </footer>
   );

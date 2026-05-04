@@ -1,15 +1,17 @@
-import { SectionReveal, StaggerReveal } from "./SectionReveal";
+import { SectionReveal } from "./SectionReveal";
 import { Award, Clock, Truck, Handshake, Leaf, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
+import { EditableText } from "@/components/cms/EditableText";
 
-const ITEMS = [
-  { icon: Award, title: "ISO 9001:2015", body: "Certified for highest quality standards." },
-  { icon: Clock, title: "25+ Years Experience", body: "Industry expertise since 1997." },
-  { icon: Truck, title: "Nationwide Delivery", body: "Strong logistics network across India." },
-  { icon: Handshake, title: "Trusted OEM Partnerships", body: "Tied up with Escorts-Kubota & Baudouin." },
-  { icon: Leaf, title: "Silent & Eco-Friendly", body: "CPCB IV+ compliant sustainable technology." },
-  { icon: ShieldCheck, title: "Trusted By Leaders", body: "Indian Railways, Army, Amazon & more." },
-];
+const ICONS = [Award, Clock, Truck, Handshake, Leaf, ShieldCheck];
+const ITEM_KEYS = [
+  { titleKey: "item1Title", bodyKey: "item1Body" },
+  { titleKey: "item2Title", bodyKey: "item2Body" },
+  { titleKey: "item3Title", bodyKey: "item3Body" },
+  { titleKey: "item4Title", bodyKey: "item4Body" },
+  { titleKey: "item5Title", bodyKey: "item5Body" },
+  { titleKey: "item6Title", bodyKey: "item6Body" },
+] as const;
 
 export function TrustGainers() {
   return (
@@ -32,38 +34,33 @@ export function TrustGainers() {
 
         {/* Cinematic Lighting Blobs */}
         <motion.div 
-          animate={{ 
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-            scale: [1, 1.1, 1]
-          }}
+          animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-1/4 -left-20 h-[500px] w-[500px] rounded-full bg-accent/20 blur-[120px]" 
         />
         <motion.div 
-          animate={{ 
-            x: [0, -40, 0],
-            y: [0, 60, 0],
-            scale: [1, 1.05, 1]
-          }}
+          animate={{ x: [0, -40, 0], y: [0, 60, 0], scale: [1, 1.05, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-1/4 -right-20 h-[600px] w-[600px] rounded-full bg-white/10 blur-[150px]" 
         />
         
         {/* Noise Texture */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay" />
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
       </div>
 
       <div className="container-x relative z-10">
         <SectionReveal className="text-center" variant="fadeUp">
-          <div className="font-display text-xs uppercase tracking-[0.4em] text-accent font-semibold">Our Strengths</div>
+          <div className="font-display text-xs uppercase tracking-[0.4em] text-accent font-semibold">
+            <EditableText section="trustGainers" contentKey="sectionLabel" />
+          </div>
           <h2 className="mt-4 w-fit font-display text-5xl font-bold md:text-6xl tracking-tight heading-underline heading-underline-center mx-auto">
-            Why Choose Us
+            <EditableText section="trustGainers" contentKey="heading" />
           </h2>
         </SectionReveal>
 
         <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {ITEMS.map((it, i) => {
+          {ITEM_KEYS.map((keys, i) => {
+            const Icon = ICONS[i];
             let variant: "slideLeft" | "slideRight" | "fadeDown" | "fadeUp" = "fadeUp";
             if (i % 3 === 0) variant = "slideLeft";
             else if (i % 3 === 2) variant = "slideRight";
@@ -71,7 +68,7 @@ export function TrustGainers() {
 
             return (
               <SectionReveal
-                key={it.title}
+                key={keys.titleKey}
                 variant={variant}
                 delay={i * 100}
                 threshold={0.1}
@@ -84,14 +81,18 @@ export function TrustGainers() {
                   <div className="absolute top-0 left-0 h-1 w-0 bg-accent transition-all duration-500 group-hover:w-full" />
                   
                   <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-sm bg-accent text-brand-navy shadow-[0_0_20px_rgba(242,169,0,0.3)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-white">
-                    <it.icon size={26} strokeWidth={1.5} />
+                    <Icon size={26} strokeWidth={1.5} />
                   </div>
-                  <h3 className="font-display text-xl font-bold tracking-tight text-white group-hover:text-accent transition-colors duration-300">{it.title}</h3>
-                  <p className="mt-3 text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors duration-300">{it.body}</p>
+                  <h3 className="font-display text-xl font-bold tracking-tight text-white group-hover:text-accent transition-colors duration-300">
+                    <EditableText section="trustGainers" contentKey={keys.titleKey} />
+                  </h3>
+                  <p className="mt-3 text-sm text-white/60 leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                    <EditableText section="trustGainers" contentKey={keys.bodyKey} />
+                  </p>
                   
-                  {/* Decorative Number Background */}
+                  {/* Decorative Icon Background */}
                   <div className="absolute -bottom-4 -right-4 text-8xl font-bold text-white/[0.03] transition-all duration-500 group-hover:text-accent/[0.05] group-hover:scale-110">
-                    <it.icon size={120} />
+                    <Icon size={120} />
                   </div>
                 </motion.div>
               </SectionReveal>

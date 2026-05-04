@@ -4,6 +4,8 @@ import { SectionReveal } from "@/components/site/SectionReveal";
 import { ArrowRight, Zap, Package } from "lucide-react";
 import dgProduct from "@/assets/brand/dg-product.jpg";
 import containerImg from "@/assets/brand/container.png";
+import { EditableText } from "@/components/cms/EditableText";
+import { useCMSState } from "@/components/cms/CMSEditorProvider";
 
 interface ProductCategory {
   id: string;
@@ -35,12 +37,14 @@ const categories: ProductCategory[] = [
 
 export default function Products() {
   const navigate = useNavigate();
+  // We only need useCMSState to get the value for SEO title, as SEO is not an EditableText
+  const { content } = useCMSState();
 
   return (
     <>
       <SEO
-        title="Our Products — Aditya Genset"
-        description="Select a category to explore our comprehensive range of power solutions and customized enclosures."
+        title={`${content.productConfig.sectionTitle} — Aditya Genset`}
+        description={content.productConfig.sectionSubtitle}
       />
 
       <section className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 md:py-16 flex items-center">
@@ -49,14 +53,20 @@ export default function Products() {
           <SectionReveal>
             <div className="text-center max-w-3xl mx-auto mb-12">
               <div className="inline-block font-display text-xs uppercase tracking-[0.3em] text-accent mb-3">
-                PRODUCT RANGE
+                <EditableText section="productConfig" contentKey="pageLabel" />
               </div>
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-                Our Products
-              </h1>
-              <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-                Select a category to explore our comprehensive range of power solutions and customized enclosures.
-              </p>
+              <EditableText 
+                section="productConfig" 
+                contentKey="sectionTitle" 
+                className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4 block" 
+                as="h1" 
+              />
+              <EditableText 
+                section="productConfig" 
+                contentKey="sectionSubtitle" 
+                className="text-sm text-muted-foreground max-w-xl mx-auto block" 
+                as="p" 
+              />
             </div>
           </SectionReveal>
 
@@ -66,7 +76,13 @@ export default function Products() {
               <SectionReveal key={category.id} delay={index * 100}>
                 <div
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100"
-                  onClick={() => navigate(category.link)}
+                  onClick={(e) => {
+                    if (document.querySelector('.fixed.inset-0.z-\\[100\\]')) {
+                      e.preventDefault();
+                      return;
+                    }
+                    navigate(category.link);
+                  }}
                 >
                   {/* Image Container */}
                   <div className="relative h-64 overflow-hidden bg-gray-100">
@@ -88,16 +104,27 @@ export default function Products() {
 
                   {/* Content */}
                   <div className="p-6">
-                    <h2 className="font-display text-2xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
-                      {category.title}
-                    </h2>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                      {category.description}
-                    </p>
+                    <EditableText 
+                      section="productConfig" 
+                      contentKey={`category${index + 1}Title`} 
+                      className="font-display text-2xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300 block" 
+                      as="h2" 
+                    />
+                    <EditableText 
+                      section="productConfig" 
+                      contentKey={`category${index + 1}Desc`} 
+                      className="text-sm text-muted-foreground mb-4 leading-relaxed block" 
+                      as="p" 
+                    />
                     
                     {/* CTA Button */}
-                    <button className="inline-flex items-center gap-2 text-sm font-semibold text-accent group-hover:gap-4 transition-all duration-300">
-                      <span>Select Category</span>
+                    <button className="inline-flex items-center gap-2 text-sm font-semibold text-accent group-hover:gap-4 transition-all duration-300 pointer-events-auto relative z-20" onClick={(e) => {
+                      if (document.querySelector('.fixed.inset-0.z-\\[100\\]')) {
+                        // Prevent navigation if in edit mode
+                        e.stopPropagation();
+                      }
+                    }}>
+                      <EditableText section="productConfig" contentKey="ctaText" />
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>

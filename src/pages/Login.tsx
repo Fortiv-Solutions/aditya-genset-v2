@@ -19,16 +19,20 @@ export default function Login() {
       return;
     }
 
-    // Accept any credentials
+    // Set login state
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userEmail", email);
     
     // Show success message
     toast.success("Login successful! Redirecting...");
     
-    // Redirect to home after a short delay
+    // Redirect based on credentials
     setTimeout(() => {
-      navigate("/");
+      if (email === "admin@fortivsolutions.in" && password === "Fortiv@2026") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }, 500);
   };
 

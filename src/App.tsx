@@ -5,28 +5,53 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { RouteFade } from "@/components/site/RouteFade";
+
+// Site Pages
 import Home from "./pages/Home";
-import Welcome from "./pages/Welcome";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import DGSetsCategory from "./pages/DGSetsCategory";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+
+// Admin Layout
+import AdminLayout from "./components/admin/AdminLayout";
+
+// Admin Pages
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AddProduct from "./pages/admin/AddProduct";
+import AdminLeads from "./pages/admin/AdminLeads";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminReports from "./pages/admin/AdminReports";
+import AdminSettings from "./pages/admin/AdminSettings";
+import AdminCMS from "./pages/admin/AdminCMS";
+import CMSEditor from "./pages/admin/CMSEditor";
+import AdminComingSoon from "./pages/admin/AdminComingSoon";
+
 import { useState, useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-// Protected Route Component
+// ─── Protected Route ────────────────────────────────────────────────────────
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   return isLoggedIn ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
+// ─── Admin Route (Protected + AdminLayout) ──────────────────────────────────
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  return <AdminLayout>{children}</AdminLayout>;
+};
+
+import { CMSEditorProvider } from "./components/cms/CMSEditorProvider";
+
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check login status on mount
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
   }, []);
@@ -36,12 +61,41 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            {/* Public Route - Login */}
-            <Route path="/login" element={<Login />} />
+        <CMSEditorProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <Routes>
+              {/* ── Public ─────────────────────────────────── */}
+              <Route path="/login" element={<Login />} />
 
-            {/* Protected Routes - Wrapped in SiteLayout */}
+            {/* ── Admin Dashboard ─────────────────────────── */}
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin/products" element={<AdminRoute><AdminProducts /></AdminRoute>} />
+            <Route path="/admin/products/add" element={<AdminRoute><AddProduct /></AdminRoute>} />
+            <Route path="/admin/products/categories" element={
+              <AdminRoute>
+                <AdminComingSoon title="Product Categories" description="Manage the hierarchical category tree for DG Sets, Open DG Sets, Industrial Sets, and Accessories." />
+              </AdminRoute>
+            } />
+            <Route path="/admin/products/:id/edit" element={<AdminRoute><AddProduct /></AdminRoute>} />
+
+            <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
+            <Route path="/admin/leads/pipeline" element={<AdminRoute><AdminLeads /></AdminRoute>} />
+            <Route path="/admin/leads/followups" element={
+              <AdminRoute>
+                <AdminComingSoon title="Follow-up Manager" description="View and manage all scheduled follow-ups, overdue tasks, and daily sales rep reminders." />
+              </AdminRoute>
+            } />
+
+            <Route path="/admin/cms" element={<AdminRoute><AdminCMS /></AdminRoute>} />
+            <Route path="/admin/cms/edit/:pageId" element={<ProtectedRoute><CMSEditor /></ProtectedRoute>} />
+
+            {/* Removed CMS, Orders, Dealers, Service routes to focus on Presentation Tool features */}
+
+            <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+            <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
+            <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+
+            {/* ── Site (Protected + SiteLayout) ───────────── */}
             <Route
               path="/*"
               element={
@@ -50,7 +104,6 @@ const App = () => {
                     <RouteFade>
                       <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/welcome" element={<Welcome />} />
                         <Route path="/products" element={<Products />} />
                         <Route path="/products/dg-sets" element={<DGSetsCategory />} />
                         <Route path="/products/:slug" element={<ProductDetail />} />
@@ -62,7 +115,8 @@ const App = () => {
               }
             />
           </Routes>
-        </BrowserRouter>
+          </BrowserRouter>
+        </CMSEditorProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

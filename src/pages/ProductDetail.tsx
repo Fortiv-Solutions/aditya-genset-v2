@@ -1,16 +1,31 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { SEO } from "@/components/site/SEO";
-import { SHOWCASE } from "@/data/products";
+import { SHOWCASE, EKL15_SHOWCASE } from "@/data/products";
 import { ScrollStory } from "@/components/site/ScrollStory";
 import { ArrowLeft, Monitor } from "lucide-react";
 import { useRef } from "react";
+import { EditableText } from "@/components/cms/EditableText";
+import { useCMSState } from "@/components/cms/CMSEditorProvider";
+
+// Map of slug → showcase data
+const SHOWCASES = {
+  [SHOWCASE.slug]: SHOWCASE,
+  [EKL15_SHOWCASE.slug]: EKL15_SHOWCASE,
+};
 
 export default function ProductDetail() {
-  const { slug } = useParams();
+  const { slug, pageId } = useParams();
   const navigate = useNavigate();
   const scrollStoryRef = useRef<{ enterPresentMode: () => void }>(null);
+  const { content } = useCMSState();
 
-  if (slug !== SHOWCASE.slug) {
+  const isCMSPreview = !!pageId?.startsWith("showcaseData") || !!pageId?.startsWith("ekl15ShowcaseData");
+  const sectionId = isCMSPreview ? pageId : (slug === EKL15_SHOWCASE.slug ? "ekl15ShowcaseData" : "showcaseData");
+
+  // Find matching showcase
+  const product = slug ? SHOWCASES[slug] : undefined;
+
+  if (!isCMSPreview && !product) {
     return (
       <section className="container-x py-32 text-center">
         <SEO title="Coming soon — Adityagenset" />
@@ -24,50 +39,67 @@ export default function ProductDetail() {
     );
   }
 
+  const activeProduct = product || SHOWCASE;
+
+  // Ensure type-safety for the section
+  const sectionKey = sectionId as "showcaseData" | "ekl15ShowcaseData";
+  const productName = content?.[sectionKey]?.productName || activeProduct.name;
+
   const ld = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: SHOWCASE.name,
+    name: productName,
     brand: { "@type": "Brand", name: "Adityagenset" },
-    description: "62.5 kVA silent diesel generator set, CPCB IV+ compliant, 75 dB(A) at 1m.",
+    description: `${activeProduct.kva} kVA silent diesel generator set, CPCB IV+ compliant.`,
     category: "Diesel generator set",
   };
 
   return (
     <>
-      <SEO title={`${SHOWCASE.name} — Adityagenset`} description="Explore the 62.5 kVA Silent DG Set: engine, power, sound, dimensions — a guided scroll story." />
+      <SEO title={`${productName} — Adityagenset`} description={`Explore the ${activeProduct.kva} kVA Silent DG Set: engine, power, sound, dimensions — a guided scroll story.`} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
 
       <section className="container-x pt-12 pb-8">
-        <Link
-          to="/products"
+        <button
+          onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground story-link"
         >
-          <ArrowLeft size={12} /> All products
-        </Link>
+          <ArrowLeft size={12} /> Back to category
+        </button>
 
         <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Showcase</div>
-            <h1 className="mt-3 font-display text-5xl font-semibold leading-none md:text-6xl">
-              {SHOWCASE.name}
-            </h1>
-            <p className="mt-3 max-w-xl text-muted-foreground">
-              A 6-chapter walkthrough — scroll to explore each system.
-            </p>
+            <EditableText
+              section={sectionKey}
+              contentKey="pageLabel"
+              className="font-display text-xs uppercase tracking-[0.3em] text-accent block"
+              as="div"
+            />
+            <EditableText
+              section={sectionKey}
+              contentKey="productName"
+              className="mt-3 font-display text-5xl font-semibold leading-none md:text-6xl block"
+              as="h1"
+            />
+            <EditableText
+              section={sectionKey}
+              contentKey="pageSubtitle"
+              className="mt-3 max-w-xl text-muted-foreground block"
+              as="p"
+            />
           </div>
 
           <button
             onClick={() => scrollStoryRef.current?.enterPresentMode()}
-            className="inline-flex items-center gap-2 rounded-md bg-foreground px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-navy-deep hover:scale-[1.03] hover:shadow-lg active:scale-95 self-end"
+            className="cms-clickable inline-flex items-center gap-2 rounded-md bg-foreground px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-navy-deep hover:scale-[1.03] hover:shadow-lg active:scale-95 self-end"
           >
             <Monitor size={16} className="shrink-0" />
-            Present Mode
+            <EditableText section={sectionKey} contentKey="presentModeBtn" as="span" />
           </button>
         </div>
       </section>
 
-      <ScrollStory ref={scrollStoryRef} product={SHOWCASE} />
+      <ScrollStory ref={scrollStoryRef} product={activeProduct} sectionId={sectionKey} />
     </>
   );
 }

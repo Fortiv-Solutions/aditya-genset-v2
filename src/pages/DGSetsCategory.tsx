@@ -2,16 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SEO } from "@/components/site/SEO";
 import { SectionReveal } from "@/components/site/SectionReveal";
-import { ArrowRight, Zap, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Zap, Search } from "lucide-react";
 import gensetHero from "@/assets/genset-hero-CdfwbH8a.jpg";
 import gensetLarge from "@/assets/genset-large-CFWdgEox.jpg";
 import gensetOpen from "@/assets/genset-open-tU4whFeg.jpg";
 import gensetSmall from "@/assets/genset-small-C07x-piZ.jpg";
+import { EditableText } from "@/components/cms/EditableText";
+import { useCMSState } from "@/components/cms/CMSEditorProvider";
 
 // Array of images to rotate through
 const gensetImages = [gensetHero, gensetLarge, gensetOpen, gensetSmall];
 
-interface DGSet {
+export interface DGSet {
   id: string;
   model: string;
   kva: number;
@@ -23,40 +25,14 @@ interface DGSet {
   compliance: string;
 }
 
-const dgSets: DGSet[] = [
+export const dgSets: DGSet[] = [
+  // Escorts-Kubota (pinned first)
+  { id: "18", model: "ATM EKL 15 (2 Cyl)-IV", kva: 15, engine: "Escorts", application: "Prime", fuel: "4.1 L/h", noise: "70 dB(A)", image: gensetImages[1], compliance: "CPCB IV" },
+
   // Baudouin Generators
   { id: "1", model: "ATMBD 250", kva: 250, engine: "Baudouin", application: "Prime", fuel: "52.5 L/h", noise: "73 dB(A)", image: gensetImages[0], compliance: "CPCB IV+" },
   { id: "2", model: "ATMBD 320", kva: 320, engine: "Baudouin", application: "Prime", fuel: "67.2 L/h", noise: "74 dB(A)", image: gensetImages[1], compliance: "CPCB IV+" },
   { id: "3", model: "ATMBD 400", kva: 400, engine: "Baudouin", application: "Prime", fuel: "84 L/h", noise: "74 dB(A)", image: gensetImages[2], compliance: "CPCB IV+" },
-  { id: "4", model: "ATMBD 450", kva: 450, engine: "Baudouin", application: "Prime", fuel: "94.5 L/h", noise: "74 dB(A)", image: gensetImages[3], compliance: "CPCB IV+" },
-  { id: "5", model: "ATMBD 500", kva: 500, engine: "Baudouin", application: "Standby", fuel: "105 L/h", noise: "75 dB(A)", image: gensetImages[0], compliance: "CPCB IV+" },
-  { id: "6", model: "ATMBD 625", kva: 625, engine: "Baudouin", application: "Standby", fuel: "131.3 L/h", noise: "75 dB(A)", image: gensetImages[1], compliance: "CPCB IV+" },
-  { id: "7", model: "ATMBD 750", kva: 750, engine: "Baudouin", application: "Standby", fuel: "157.5 L/h", noise: "76 dB(A)", image: gensetImages[2], compliance: "CPCB IV+" },
-  { id: "8", model: "ATMBD 910", kva: 910, engine: "Baudouin", application: "Standby", fuel: "191.1 L/h", noise: "77 dB(A)", image: gensetImages[3], compliance: "CPCB IV+" },
-  { id: "9", model: "ATMBD 1010", kva: 1010, engine: "Baudouin", application: "Continuous", fuel: "212.1 L/h", noise: "77 dB(A)", image: gensetImages[0], compliance: "CPCB IV+" },
-  { id: "10", model: "ATMBD 1250", kva: 1250, engine: "Baudouin", application: "Continuous", fuel: "262.5 L/h", noise: "78 dB(A)", image: gensetImages[1], compliance: "CPCB IV+" },
-  { id: "11", model: "ATMBD 1500", kva: 1500, engine: "Baudouin", application: "Continuous", fuel: "315 L/h", noise: "80 dB(A)", image: gensetImages[2], compliance: "CPCB IV+" },
-  { id: "12", model: "ATMBD 1850", kva: 1850, engine: "Baudouin", application: "Continuous", fuel: "388.5 L/h", noise: "81 dB(A)", image: gensetImages[3], compliance: "CPCB IV+" },
-  { id: "13", model: "ATMBD 2000", kva: 2000, engine: "Baudouin", application: "Continuous", fuel: "420 L/h", noise: "82 dB(A)", image: gensetImages[0], compliance: "CPCB IV+" },
-  { id: "14", model: "ATMBD 2250", kva: 2250, engine: "Baudouin", application: "Continuous", fuel: "472.5 L/h", noise: "83 dB(A)", image: gensetImages[1], compliance: "CPCB IV+" },
-  { id: "15", model: "ATMBD 2500", kva: 2500, engine: "Baudouin", application: "Continuous", fuel: "525 L/h", noise: "85 dB(A)", image: gensetImages[2], compliance: "CPCB IV+" },
-  
-  // Escorts-Kubota Generators
-  { id: "16", model: "ATM EKL 7.5-IV", kva: 7.5, engine: "Escorts", application: "Prime", fuel: "2 L/h", noise: "69 dB(A)", image: gensetImages[3], compliance: "CPCB IV" },
-  { id: "17", model: "ATM EKL 10-IV", kva: 10, engine: "Escorts", application: "Prime", fuel: "2.7 L/h", noise: "69 dB(A)", image: gensetImages[0], compliance: "CPCB IV" },
-  { id: "18", model: "ATM EKL 15 (2 Cyl)-IV", kva: 15, engine: "Escorts", application: "Prime", fuel: "4.1 L/h", noise: "70 dB(A)", image: gensetImages[1], compliance: "CPCB IV" },
-  { id: "19", model: "ATM EKL 15 (3 Cyl)-IV", kva: 15, engine: "Escorts", application: "Prime", fuel: "4.1 L/h", noise: "70 dB(A)", image: gensetImages[2], compliance: "CPCB IV" },
-  { id: "20", model: "ATM EKL 20 (2 Cyl)-IV", kva: 20, engine: "Escorts", application: "Prime", fuel: "5.4 L/h", noise: "70 dB(A)", image: gensetImages[3], compliance: "CPCB IV" },
-  { id: "21", model: "ATM EKL 20 (3 Cyl)-IV", kva: 20, engine: "Escorts", application: "Prime", fuel: "5.4 L/h", noise: "70 dB(A)", image: gensetImages[0], compliance: "CPCB IV" },
-  { id: "22", model: "ATM EKL 25-IV", kva: 25, engine: "Escorts", application: "Prime", fuel: "6.8 L/h", noise: "71 dB(A)", image: gensetImages[1], compliance: "CPCB IV" },
-  { id: "23", model: "ATM EKL 30-IV", kva: 30, engine: "Escorts", application: "Prime", fuel: "8.1 L/h", noise: "71 dB(A)", image: gensetImages[2], compliance: "CPCB IV" },
-  { id: "24", model: "ATM EKL 35 Prime", kva: 35, engine: "Escorts", application: "Prime", fuel: "9.5 L/h", noise: "72 dB(A)", image: gensetImages[3], compliance: "CPCB IV" },
-  { id: "25", model: "ATM EKL 35 Standby", kva: 35, engine: "Escorts", application: "Standby", fuel: "9.5 L/h", noise: "72 dB(A)", image: gensetImages[0], compliance: "CPCB IV" },
-  { id: "26", model: "ATM EKL 40-IV", kva: 40, engine: "Escorts", application: "Prime", fuel: "10.8 L/h", noise: "72 dB(A)", image: gensetImages[1], compliance: "CPCB IV" },
-  { id: "27", model: "ATM EKL 45 Standby", kva: 45, engine: "Escorts", application: "Standby", fuel: "12.2 L/h", noise: "73 dB(A)", image: gensetImages[2], compliance: "CPCB IV" },
-  { id: "28", model: "ATM EKL 45 Prime", kva: 45, engine: "Escorts", application: "Prime", fuel: "12.2 L/h", noise: "73 dB(A)", image: gensetImages[3], compliance: "CPCB IV" },
-  { id: "29", model: "ATM EKL 50-IV", kva: 50, engine: "Escorts", application: "Prime", fuel: "13.5 L/h", noise: "73 dB(A)", image: gensetImages[0], compliance: "CPCB IV" },
-  { id: "30", model: "ATM EKL 58.5-IV", kva: 58.5, engine: "Escorts", application: "Prime", fuel: "15.8 L/h", noise: "74 dB(A)", image: gensetImages[1], compliance: "CPCB IV" },
 ];
 
 const kvaRanges = [
@@ -71,13 +47,26 @@ const applications = ["All", "Prime", "Standby", "Continuous"];
 
 export default function DGSetsCategory() {
   const navigate = useNavigate();
+  const { content } = useCMSState();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEngine, setSelectedEngine] = useState<string>("All");
   const [selectedKvaRange, setSelectedKvaRange] = useState(kvaRanges[0]);
   const [selectedApplication, setSelectedApplication] = useState("All");
 
+  // Get live CMS values to override hardcoded values
+  const liveDgSets = dgSets.map(set => ({
+    ...set,
+    model: content?.productsData?.[`product_${set.id}_model`] || set.model,
+    kva: Number(content?.productsData?.[`product_${set.id}_kva`]) || set.kva,
+    engine: (content?.productsData?.[`product_${set.id}_engine`] || set.engine) as "Baudouin" | "Escorts",
+    application: (content?.productsData?.[`product_${set.id}_application`] || set.application) as "Prime" | "Standby" | "Continuous",
+    fuel: content?.productsData?.[`product_${set.id}_fuel`] || set.fuel,
+    noise: content?.productsData?.[`product_${set.id}_noise`] || set.noise,
+    compliance: content?.productsData?.[`product_${set.id}_compliance`] || set.compliance,
+  }));
+
   // Filter logic
-  const filteredSets = dgSets.filter((set) => {
+  const filteredSets = liveDgSets.filter((set) => {
     const matchesSearch = set.model.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          set.kva.toString().includes(searchQuery);
     const matchesEngine = selectedEngine === "All" || set.engine === selectedEngine;
@@ -90,20 +79,37 @@ export default function DGSetsCategory() {
   return (
     <>
       <SEO
-        title="DG Sets — Aditya Genset"
-        description="Browse 30+ DG sets, run side-by-side comparisons, and generate quotes in one session."
+        title={content.dgSetsCategory.seoTitle}
+        description={content.dgSetsCategory.seoDescription}
       />
 
       <section className="h-screen bg-white py-6 overflow-hidden flex flex-col">
         <div className="container-x max-w-7xl flex-1 flex flex-col min-h-0">
           {/* Header */}
           <div className="mb-4">
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Find the right power solution.
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Browse 30+ DG sets, run side-by-side comparisons, and generate quotes in one session.
-            </p>
+            <div className="flex items-start justify-between">
+              <div>
+                <EditableText 
+                  section="dgSetsCategory" 
+                  contentKey="pageTitle" 
+                  className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2 block" 
+                  as="h1" 
+                />
+                <EditableText 
+                  section="dgSetsCategory" 
+                  contentKey="pageSubtitle" 
+                  className="text-sm text-muted-foreground block" 
+                  as="p" 
+                />
+              </div>
+              <button 
+                onClick={() => navigate(-1)}
+                className="group flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors text-xs font-bold uppercase tracking-widest flex-shrink-0 mt-1"
+              >
+                <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Category
+              </button>
+            </div>
           </div>
 
           {/* Filters */}
@@ -185,9 +191,12 @@ export default function DGSetsCategory() {
 
           {/* Results Header */}
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-bold text-foreground">
-              Available DG Sets
-            </h2>
+            <EditableText 
+              section="dgSetsCategory" 
+              contentKey="resultsHeader" 
+              className="text-base font-bold text-foreground block" 
+              as="h2" 
+            />
             <div className="text-sm text-muted-foreground">
               Showing {filteredSets.length} results
             </div>
@@ -202,12 +211,12 @@ export default function DGSetsCategory() {
                   {/* Badge */}
                   {index === 0 && (
                     <div className="absolute top-3 left-3 z-10 px-2.5 py-1 bg-accent text-foreground text-xs font-bold uppercase tracking-wider rounded">
-                      Best Seller
+                      <EditableText section="dgSetsCategory" contentKey="badgeBestSeller" />
                     </div>
                   )}
                   {set.model === "ATMBD 1250" && (
                     <div className="absolute top-3 left-3 z-10 px-2.5 py-1 bg-blue-500 text-white text-xs font-bold uppercase tracking-wider rounded">
-                      Popular
+                      <EditableText section="dgSetsCategory" contentKey="badgePopular" />
                     </div>
                   )}
 
@@ -229,55 +238,76 @@ export default function DGSetsCategory() {
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-display text-lg font-bold text-foreground leading-tight">
-                          {set.model}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-0.5">
-                          {set.engine} · {set.application}
-                        </p>
+                        <EditableText 
+                          section="productsData" 
+                          contentKey={`product_${set.id}_model`} 
+                          className="font-display text-lg font-bold text-foreground leading-tight block" 
+                          as="h3" 
+                        />
+                        <div className="text-sm text-muted-foreground mt-0.5">
+                          <EditableText section="productsData" contentKey={`product_${set.id}_engine`} as="span" />
+                          {" · "}
+                          <EditableText section="productsData" contentKey={`product_${set.id}_application`} as="span" />
+                        </div>
                       </div>
                       <div className="text-right ml-3">
-                        <div className="text-2xl font-bold text-accent leading-none">
-                          {set.kva}
-                        </div>
+                        <EditableText 
+                          section="productsData" 
+                          contentKey={`product_${set.id}_kva`} 
+                          className="text-2xl font-bold text-accent leading-none block" 
+                          as="div" 
+                        />
                         <div className="text-xs text-muted-foreground uppercase tracking-wider mt-0.5">
-                          kVA
+                          <EditableText section="dgSetsCategory" contentKey="cardKvaLabel" />
                         </div>
                       </div>
                     </div>
 
-                    {/* Specs */}
                     <div className="space-y-2 mb-4 text-sm">
                       <div className="flex items-center gap-2.5 text-foreground">
                         <span className="text-muted-foreground">⚙</span>
-                        <span className="text-muted-foreground">Engine</span>
-                        <span className="ml-auto font-semibold">{set.engine}</span>
+                        <span className="text-muted-foreground"><EditableText section="dgSetsCategory" contentKey="cardEngineLabel" /></span>
+                        <EditableText section="productsData" contentKey={`product_${set.id}_engine`} className="ml-auto font-semibold" as="span" />
                       </div>
                       <div className="flex items-center gap-2.5 text-foreground">
                         <span className="text-muted-foreground">⛽</span>
-                        <span className="text-muted-foreground">Fuel</span>
-                        <span className="ml-auto font-semibold">{set.fuel}</span>
+                        <span className="text-muted-foreground"><EditableText section="dgSetsCategory" contentKey="cardFuelLabel" /></span>
+                        <EditableText section="productsData" contentKey={`product_${set.id}_fuel`} className="ml-auto font-semibold" as="span" />
                       </div>
                       <div className="flex items-center gap-2.5 text-foreground">
                         <span className="text-muted-foreground">🔊</span>
-                        <span className="text-muted-foreground">Noise</span>
-                        <span className="ml-auto font-semibold">{set.noise}</span>
+                        <span className="text-muted-foreground"><EditableText section="dgSetsCategory" contentKey="cardNoiseLabel" /></span>
+                        <EditableText section="productsData" contentKey={`product_${set.id}_noise`} className="ml-auto font-semibold" as="span" />
                       </div>
                     </div>
 
                     {/* Compliance Badge */}
                     <div className="mb-4">
-                      <span className="inline-block px-2.5 py-1 bg-accent/10 border border-accent/30 rounded text-xs font-bold text-accent uppercase tracking-wider">
-                        {set.compliance}
-                      </span>
+                      <EditableText 
+                        section="productsData" 
+                        contentKey={`product_${set.id}_compliance`} 
+                        className="inline-block px-2.5 py-1 bg-accent/10 border border-accent/30 rounded text-xs font-bold text-accent uppercase tracking-wider" 
+                        as="span" 
+                      />
                     </div>
 
                     {/* CTA */}
                     <button
-                      onClick={() => navigate("/products/silent-62-5")}
+                      onClick={(e) => {
+                        if (document.querySelector('.fixed.inset-0.z-\\[100\\]')) {
+                          e.preventDefault();
+                          return;
+                        }
+                        // EKL 15 (2 Cyl) has its own full showcase
+                        if (set.id === "18") {
+                          navigate("/products/ekl-15-2cyl");
+                        } else {
+                          navigate("/products/silent-62-5");
+                        }
+                      }}
                       className="w-full flex items-center justify-center gap-2.5 py-2.5 bg-gray-50 hover:bg-accent hover:text-foreground rounded-lg text-base font-semibold transition-colors group/btn border border-border hover:border-accent"
                     >
-                      <span>View Details</span>
+                      <EditableText section="dgSetsCategory" contentKey="cardCtaText" as="span" />
                       <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
                     </button>
                   </div>
@@ -293,8 +323,18 @@ export default function DGSetsCategory() {
               <div className="text-muted-foreground mb-2">
                 <Zap size={32} className="mx-auto opacity-20" />
               </div>
-              <h3 className="text-sm font-bold text-muted-foreground mb-1">No generators found</h3>
-              <p className="text-xs text-muted-foreground">Try adjusting your filters or search query</p>
+              <EditableText 
+                section="dgSetsCategory" 
+                contentKey="noResultsTitle" 
+                className="text-sm font-bold text-muted-foreground mb-1 block" 
+                as="h3" 
+              />
+              <EditableText 
+                section="dgSetsCategory" 
+                contentKey="noResultsSubtitle" 
+                className="text-xs text-muted-foreground block" 
+                as="p" 
+              />
             </div>
           )}
         </div>

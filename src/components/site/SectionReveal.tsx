@@ -1,7 +1,8 @@
-import { useRef, ElementType, HTMLAttributes } from "react";
+import React, { useRef, ElementType } from "react";
 import { motion, useInView, Variants, HTMLMotionProps } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils";
+import { useCMSState } from "../cms/CMSEditorProvider";
 
 /* ─── Shared easing ────────────────────────────────────── */
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -88,6 +89,7 @@ export function SectionReveal({
   threshold = 0.1,
 }: SectionRevealProps) {
   const reduced = useReducedMotion();
+  const { isEditMode } = useCMSState();
   const MotionTag = motion[Tag as keyof typeof motion] as React.ComponentType<HTMLMotionProps<"div">>;
 
   if (reduced) {
@@ -102,9 +104,10 @@ export function SectionReveal({
     <MotionTag
       className={cn("will-change-transform-opacity", className)}
       variants={variants[variant]}
-      initial="hidden"
+      initial={isEditMode ? "visible" : "hidden"}
       whileInView="visible"
-      viewport={{ once: false, amount: threshold }}
+      animate={isEditMode ? "visible" : undefined}
+      viewport={isEditMode ? undefined : { once: false, amount: threshold }}
       custom={delay}
     >
       {children}
@@ -147,6 +150,7 @@ export function StaggerReveal({
   as: Tag = "div",
 }: StaggerRevealProps) {
   const reduced = useReducedMotion();
+  const { isEditMode } = useCMSState();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: false, amount: threshold });
 
@@ -161,8 +165,8 @@ export function StaggerReveal({
       ref={ref}
       className={className}
       variants={containerVariants(staggerMs)}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
+      initial={isEditMode ? "visible" : "hidden"}
+      animate={(inView || isEditMode) ? "visible" : "hidden"}
     >
       {children.map((child, i) => (
         <motion.div key={i} variants={childVariant}>

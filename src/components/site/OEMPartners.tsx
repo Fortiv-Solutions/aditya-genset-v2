@@ -1,28 +1,31 @@
-import { SectionReveal, StaggerReveal } from "./SectionReveal";
+import { SectionReveal } from "./SectionReveal";
 import { motion } from "framer-motion";
+import { EditableText } from "@/components/cms/EditableText";
 
-const PARTNERS = [
-  { name: "Escorts-Kubota", tag: "Authorized OEM" },
-  { name: "Baudouin", tag: "Engine Partner" },
-  { name: "Kohler", tag: "Engine Partner" },
-];
+const PARTNER_KEYS = [
+  { nameKey: "partner1Name", tagKey: "partner1Tag" },
+  { nameKey: "partner2Name", tagKey: "partner2Tag" },
+  { nameKey: "partner3Name", tagKey: "partner3Tag" },
+] as const;
 
 export function OEMPartners() {
   return (
     <section className="relative flex min-h-screen snap-center flex-col justify-center bg-secondary/30 pt-16 md:pt-0">
       <div className="container-x">
         <SectionReveal className="text-center" variant="fadeUp">
-          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">Engine Partners</div>
+          <div className="font-display text-xs uppercase tracking-[0.3em] text-accent">
+            <EditableText section="oemPartners" contentKey="sectionLabel" />
+          </div>
           <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl heading-underline heading-underline-center inline-block">
-            Our OEM Partners
+            <EditableText section="oemPartners" contentKey="heading" />
           </h2>
         </SectionReveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-3 max-w-5xl mx-auto">
-          {PARTNERS.map((p, i) => (
-            <SectionReveal 
-              key={p.name} 
-              variant={i === 0 ? "slideLeft" : i === 2 ? "slideRight" : "fadeUp"} 
+          {PARTNER_KEYS.map((p, i) => (
+            <SectionReveal
+              key={p.nameKey}
+              variant={i === 0 ? "slideLeft" : i === 2 ? "slideRight" : "fadeUp"}
               delay={i * 100}
               threshold={0.1}
             >
@@ -35,8 +38,12 @@ export function OEMPartners() {
                 
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
                   <div className="mb-2 h-1 w-8 rounded-full bg-accent/20 transition-all duration-500 group-hover:w-12 group-hover:bg-accent" />
-                  <div className="font-display text-xl font-bold text-foreground md:text-2xl">{p.name}</div>
-                  <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">{p.tag}</div>
+                  <div className="font-display text-xl font-bold text-foreground md:text-2xl">
+                    <EditableText section="oemPartners" contentKey={p.nameKey} />
+                  </div>
+                  <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                    <EditableText section="oemPartners" contentKey={p.tagKey} />
+                  </div>
                 </div>
               </motion.div>
             </SectionReveal>

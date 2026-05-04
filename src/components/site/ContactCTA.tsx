@@ -1,5 +1,6 @@
 import { SectionReveal } from "./SectionReveal";
-import { Phone, Mail, Globe, MapPin, ArrowRight } from "lucide-react";
+import { Phone, Mail, Globe, MapPin } from "lucide-react";
+import { EditableText } from "@/components/cms/EditableText";
 
 export function ContactCTA() {
   return (
@@ -14,10 +15,13 @@ export function ContactCTA() {
           
           <SectionReveal variant="slideLeft">
             <h2 className="font-display text-4xl font-bold md:text-6xl text-balance uppercase">
-              Let’s Power Your <span className="text-accent">Future</span>
+              <EditableText section="contactCTA" contentKey="heading1" />{" "}
+              <span className="text-accent">
+                <EditableText section="contactCTA" contentKey="headingAccent" />
+              </span>
             </h2>
             <p className="mt-6 text-lg text-white/70 max-w-lg">
-              Together we keep India running — contact us for a free consultation
+              <EditableText section="contactCTA" contentKey="description" />
             </p>
 
             <div className="mt-12 space-y-8">
@@ -31,8 +35,12 @@ export function ContactCTA() {
                     <Phone size={20} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">Phone</div>
-                    <div className="text-lg font-medium">+91 99249 68777</div>
+                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                      <EditableText section="contactCTA" contentKey="phoneLabel" />
+                    </div>
+                    <div className="text-lg font-medium">
+                      <EditableText section="contactCTA" contentKey="phoneValue" />
+                    </div>
                   </div>
                 </div>
                 
@@ -41,8 +49,12 @@ export function ContactCTA() {
                     <Mail size={20} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">Email</div>
-                    <div className="text-lg font-medium">sales@adityagenset.com</div>
+                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                      <EditableText section="contactCTA" contentKey="emailLabel" />
+                    </div>
+                    <div className="text-lg font-medium">
+                      <EditableText section="contactCTA" contentKey="emailValue" />
+                    </div>
                   </div>
                 </div>
 
@@ -51,8 +63,12 @@ export function ContactCTA() {
                     <Globe size={20} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">Website</div>
-                    <div className="text-lg font-medium">www.adityagenset.com</div>
+                    <div className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                      <EditableText section="contactCTA" contentKey="websiteLabel" />
+                    </div>
+                    <div className="text-lg font-medium">
+                      <EditableText section="contactCTA" contentKey="websiteValue" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -62,7 +78,8 @@ export function ContactCTA() {
           <SectionReveal variant="slideRight" delay={150}>
             <div className="rounded-sm border border-white/10 bg-white/5 p-8 backdrop-blur-md lg:p-10">
               <div className="mb-8 font-display text-xl font-bold flex items-center gap-2">
-                <span>📍</span> Addresses
+                <span>📍</span>
+                <EditableText section="contactCTA" contentKey="addressesTitle" />
               </div>
               
               <div className="space-y-10">
@@ -70,11 +87,11 @@ export function ContactCTA() {
                   <div className="flex items-start gap-3">
                     <MapPin size={20} className="mt-1 shrink-0 text-accent" />
                     <div>
-                      <div className="font-display text-lg font-bold">Manufacturing Unit</div>
+                      <div className="font-display text-lg font-bold">
+                        <EditableText section="contactCTA" contentKey="address1Title" />
+                      </div>
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">
-                        Plot No.29A/B, Survey No.208,<br />
-                        Govt Ind. Estate, Phase 2, Pipariya,<br />
-                        Silvassa – 396230
+                        <EditableText section="contactCTA" contentKey="address1Body" />
                       </div>
                     </div>
                   </div>
@@ -86,11 +103,11 @@ export function ContactCTA() {
                   <div className="flex items-start gap-3">
                     <MapPin size={20} className="mt-1 shrink-0 text-accent" />
                     <div>
-                      <div className="font-display text-lg font-bold">Corporate Office</div>
+                      <div className="font-display text-lg font-bold">
+                        <EditableText section="contactCTA" contentKey="address2Title" />
+                      </div>
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">
-                        Shop No.53, 2nd Floor,<br />
-                        Aakash Business Centre,<br />
-                        Piplod, Surat – 395007, Gujarat
+                        <EditableText section="contactCTA" contentKey="address2Body" />
                       </div>
                     </div>
                   </div>
@@ -99,7 +116,7 @@ export function ContactCTA() {
 
               <div className="mt-12 pt-8 border-t border-white/10 text-center">
                 <div className="text-xs font-semibold uppercase tracking-widest text-white/50 italic">
-                  "We Stand When Power Sleeps!"
+                  <EditableText section="contactCTA" contentKey="tagline" />
                 </div>
               </div>
             </div>

@@ -20,12 +20,17 @@ import { ContactCTA } from "@/components/site/ContactCTA";
 import { ArrowRight, Play } from "lucide-react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { wordStagger, fadeUp } from "@/lib/animations";
+import { EditableText } from "@/components/cms/EditableText";
+import { useCMSState } from "@/components/cms/CMSEditorProvider";
+import { CMSSection } from "@/lib/sanity";
 
 export default function Home() {
   const reduced = useReducedMotion();
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 1000], [0, 300]);
   const cardY = useTransform(scrollY, [0, 1000], [0, -80]);
+  
+  const { content } = useCMSState();
 
   useEffect(() => {
     document.documentElement.classList.add("snap-container");
@@ -35,8 +40,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Get Your Silent Diesel Generators Today | Aditya — ISO Certified"
-        description="ISO 9001:2015 certified manufacturer of silent diesel generator sets, 15–500 kVA. Pan-India delivery. Trusted since 1997."
+        title={content.showcase.seoTitle}
+        description={content.showcase.seoDescription}
       />
 
       {/* Slide 1 — Hero Section (Landing Screen) */}
@@ -58,56 +63,50 @@ export default function Home() {
             {/* Brand Title Group */}
             <div className="flex flex-col">
               <h1 className="font-display text-5xl font-black uppercase tracking-tighter text-foreground md:text-6xl lg:text-7xl leading-[0.9] whitespace-nowrap">
-                Aditya <span className="text-accent">Genset</span>
+                <EditableText section="showcase" contentKey="heroTitle" />
               </h1>
-              <div className="font-display text-[10px] font-black uppercase tracking-[0.4em] text-accent mt-2">
-                Aditya Tech Mech Pvt. Ltd.
-              </div>
+              <EditableText section="showcase" contentKey="heroSubtitle" className="font-display text-[10px] font-black uppercase tracking-[0.4em] text-accent mt-2 block" as="div" />
             </div>
 
             {/* Tagline & Certification Row */}
             <div className="flex flex-col gap-5 border-l-2 border-accent/20 pl-6">
-              <p className="text-lg font-bold text-foreground md:text-xl leading-tight tracking-tight whitespace-nowrap">
-                Empowering India with <span className="text-muted-foreground">Uninterrupted Power Since 1997</span>
-              </p>
+              <EditableText section="showcase" contentKey="heroTagline" className="text-lg font-bold text-foreground md:text-xl leading-tight tracking-tight whitespace-nowrap block" as="p" />
               
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/30 px-4 py-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
-                  ISO 9001:2015 Certified
-                </span>
+                <EditableText section="showcase" contentKey="heroCertification" className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground" />
               </div>
             </div>
 
             {/* Structured Contact Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full pt-4">
-              <a href="tel:+919924968777" className="flex items-center gap-3 group">
+              <a href="tel:+919924968777" className="flex items-center gap-3 group pointer-events-auto">
                 <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-brand-navy text-white transition-all duration-300 group-hover:bg-accent group-hover:text-brand-navy">
                   <span className="text-sm">📞</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Call Us</span>
-                  <span className="text-sm font-bold text-foreground group-hover:text-accent transition-colors">+91 99249 68777</span>
+                  <EditableText section="showcase" contentKey="heroContactPhoneLabel" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground" />
+                  <EditableText section="showcase" contentKey="heroContactPhone" className="text-sm font-bold text-foreground group-hover:text-accent transition-colors" />
                 </div>
               </a>
 
-              <a href="mailto:sales@adityagenset.com" className="flex items-center gap-3 group">
+              <a href="mailto:sales@adityagenset.com" className="flex items-center gap-3 group pointer-events-auto">
                 <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-brand-navy text-white transition-all duration-300 group-hover:bg-accent group-hover:text-brand-navy">
                   <span className="text-sm">✉</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Email</span>
-                  <span className="text-sm font-bold text-foreground group-hover:text-accent transition-colors">sales@adityagenset.com</span>
+                  <EditableText section="showcase" contentKey="heroContactEmailLabel" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground" />
+                  <EditableText section="showcase" contentKey="heroContactEmail" className="text-sm font-bold text-foreground group-hover:text-accent transition-colors" />
                 </div>
               </a>
 
-              <a href="https://www.adityagenset.com" className="flex items-center gap-3 group col-span-1 sm:col-span-2 mt-2">
+              <a href="https://www.adityagenset.com" className="flex items-center gap-3 group col-span-1 sm:col-span-2 mt-2 pointer-events-auto">
                 <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-brand-navy text-white transition-all duration-300 group-hover:bg-accent group-hover:text-brand-navy">
                   <span className="text-sm">🌐</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Website</span>
-                  <span className="text-sm font-bold text-foreground group-hover:text-accent transition-colors">www.adityagenset.com</span>
+                  <EditableText section="showcase" contentKey="heroContactWebsiteLabel" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground" />
+                  <EditableText section="showcase" contentKey="heroContactWebsite" className="text-sm font-bold text-foreground group-hover:text-accent transition-colors" />
                 </div>
               </a>
             </div>
@@ -130,27 +129,27 @@ export default function Home() {
                   whileHover={{ scale: 1.02, y: -4 }}
                   transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
                 >
-                  <div className="absolute -top-3 left-6 rounded-sm bg-amber-gradient px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-foreground shadow-lg transition-transform duration-300 group-hover/card:-translate-y-1">
-                    Featured · 62.5 kVA
-                  </div>
-                  <div className="mx-auto h-56 w-full overflow-hidden rounded-sm transition-transform duration-700 group-hover/card:scale-[1.02]">
-                    <img 
-                      src={dgRealistic} 
-                      alt="62.5 kVA Silent Diesel Generator" 
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                  <div className="mt-4 grid grid-cols-3 gap-4 border-t border-border pt-4 text-foreground">
-                    <Stat v="62.5" l="kVA" />
-                    <Stat v="75" l="dB(A)" />
-                    <Stat v="CPCB IV+" l="Compliant" small />
-                  </div>
-                  <Link
-                    to="/products/silent-62-5"
-                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-xs font-semibold text-foreground transition-all duration-300 ease-brand hover:bg-accent/90 hover:shadow-lg active:scale-[0.98] group"
-                  >
-                    Explore Specs <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
+                <div className="absolute -top-3 left-6 rounded-sm bg-amber-gradient px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-foreground shadow-lg transition-transform duration-300 group-hover/card:-translate-y-1">
+                  <EditableText section="showcase" contentKey="featuredBadge" />
+                </div>
+                <div className="mx-auto h-56 w-full overflow-hidden rounded-sm transition-transform duration-700 group-hover/card:scale-[1.02]">
+                  <img 
+                    src={dgRealistic} 
+                    alt="62.5 kVA Silent Diesel Generator" 
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-4 border-t border-border pt-4 text-foreground">
+                  <Stat section="showcase" vKey="featuredStat1Value" lKey="featuredStat1Label" />
+                  <Stat section="showcase" vKey="featuredStat2Value" lKey="featuredStat2Label" />
+                  <Stat section="showcase" vKey="featuredStat3Value" lKey="featuredStat3Label" small />
+                </div>
+                <Link
+                  to="/products/silent-62-5"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-4 py-2.5 text-xs font-semibold text-foreground transition-all duration-300 ease-brand hover:bg-accent/90 hover:shadow-lg active:scale-[0.98] group pointer-events-auto"
+                >
+                  <EditableText section="showcase" contentKey="featuredButton" /> <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
                 </motion.div>
               </motion.div>
             </SectionReveal>
@@ -188,11 +187,15 @@ export default function Home() {
   );
 }
 
-function Stat({ v, l, small }: { v: string; l: string; small?: boolean }) {
+function Stat({ section, vKey, lKey, small }: { section: CMSSection; vKey: string; lKey: string; small?: boolean }) {
   return (
     <div>
-      <div className={`num-display font-bold text-foreground ${small ? "text-sm" : "text-lg"}`}>{v}</div>
-      <div className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">{l}</div>
+      <div className={`num-display font-bold text-foreground ${small ? "text-sm" : "text-lg"}`}>
+        <EditableText section={section} contentKey={vKey} />
+      </div>
+      <div className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+        <EditableText section={section} contentKey={lKey} />
+      </div>
     </div>
   );
 }

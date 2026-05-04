@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { Minimize2, ChevronDown, Info, Settings, Shield, Zap, Droplets } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeUp, scaleIn, durations, easings } from "@/lib/animations";
+import { EditableText } from "@/components/cms/EditableText";
+import type { CMSSection } from "@/lib/sanity";
 
 // Main image - always dg-real-1
 import mainImage from "@/assets/brand/dg-real-1.png";
@@ -115,10 +117,13 @@ const HOTSPOTS: Hotspot[] = [
   }
 ];
 
-export function GuidedPresentation({ onClose }: { onClose: () => void }) {
+export function GuidedPresentation({ onClose, sectionId = "showcaseData" }: { onClose: () => void, sectionId?: string }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
+    container: wrapperRef,
     offset: ["start start", "end end"]
   });
 
@@ -147,12 +152,13 @@ export function GuidedPresentation({ onClose }: { onClose: () => void }) {
   const activeHotspot = HOTSPOTS[currentIndex];
 
   return (
-    <div ref={containerRef} className="relative h-[600vh] bg-[#f8f9fa] text-foreground selection:bg-accent selection:text-white overflow-x-hidden z-[9999]">
-      {/* Fixed Background Visuals */}
-      <div className="fixed inset-0 h-screen w-screen overflow-hidden bg-[#f8f9fa]">
-        <motion.div
-          className="absolute inset-0"
-        >
+    <div ref={wrapperRef} className="fixed inset-0 z-[9999] overflow-y-auto bg-[#f8f9fa] pointer-events-auto">
+      <div ref={containerRef} className="relative h-[600vh] w-full text-foreground selection:bg-accent selection:text-white">
+        {/* Sticky Background Visuals */}
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#f8f9fa]">
+          <motion.div
+            className="absolute inset-0"
+          >
           <motion.div
             animate={{
               scale: activeHotspot.zoom,
@@ -250,22 +256,18 @@ export function GuidedPresentation({ onClose }: { onClose: () => void }) {
                   <div className="h-px flex-1 bg-white/10" />
                 </motion.div>
 
-                <motion.h3 
-                  className="font-display text-3xl font-semibold mb-3 leading-tight"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: durations.base, delay: 0.2 }}
-                >
-                  {activeHotspot.title}
-                </motion.h3>
-                <motion.p 
-                  className="text-white/70 text-sm leading-relaxed mb-8"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: durations.base, delay: 0.3 }}
-                >
-                  {activeHotspot.description}
-                </motion.p>
+                <EditableText 
+                  section={sectionId as CMSSection} 
+                  contentKey={`hotspot_${currentIndex}_title`} 
+                  className="font-display text-3xl font-semibold mb-3 leading-tight block" 
+                  as="h3" 
+                />
+                <EditableText 
+                  section={sectionId as CMSSection} 
+                  contentKey={`hotspot_${currentIndex}_desc`} 
+                  className="text-white/70 text-sm leading-relaxed mb-8 block" 
+                  as="p" 
+                />
 
                 <motion.div 
                   className="grid grid-cols-2 gap-4"
@@ -289,8 +291,18 @@ export function GuidedPresentation({ onClose }: { onClose: () => void }) {
                         visible: { opacity: 1, y: 0, transition: { duration: durations.base } }
                       }}
                     >
-                      <span className="text-[9px] uppercase tracking-widest text-white/40 block mb-1">{spec.label}</span>
-                      <span className="text-sm font-semibold">{spec.value}</span>
+                      <EditableText 
+                        section={sectionId as CMSSection} 
+                        contentKey={`hotspot_${currentIndex}_spec${i}_label`} 
+                        className="text-[9px] uppercase tracking-widest text-white/40 block mb-1" 
+                        as="span" 
+                      />
+                      <EditableText 
+                        section={sectionId as CMSSection} 
+                        contentKey={`hotspot_${currentIndex}_spec${i}_value`} 
+                        className="text-sm font-semibold block" 
+                        as="span" 
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -374,10 +386,11 @@ export function GuidedPresentation({ onClose }: { onClose: () => void }) {
             <motion.button
               key={h.id}
               onClick={() => {
+                if (!wrapperRef.current) return;
                 const scrollHeight = containerRef.current?.scrollHeight || 0;
-                const viewHeight = window.innerHeight;
+                const viewHeight = wrapperRef.current.clientHeight;
                 const targetScroll = (i / (HOTSPOTS.length - 1)) * (scrollHeight - viewHeight);
-                window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                wrapperRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
               }}
               className="group flex items-center justify-end gap-4 text-right"
               initial={{ opacity: 0, x: 10 }}
@@ -410,6 +423,7 @@ export function GuidedPresentation({ onClose }: { onClose: () => void }) {
             className="h-full bg-accent shadow-[0_0_10px_rgba(242,169,0,0.3)]"
             style={{ scaleX: scrollYProgress, originX: 0 }}
           />
+        </div>
         </div>
       </div>
     </div>

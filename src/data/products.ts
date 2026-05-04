@@ -221,3 +221,188 @@ export const PRODUCTS: ProductSummary[] = [
     thumbnail: dgOverview,
   },
 ];
+
+// ── EKL 15 (2 Cyl)-IV Showcase ──────────────────────────────────────────────
+import ekl15Engine from "@/assets/brand/engine-escorts.jpg";
+import ekl15Control from "@/assets/brand/control-panel.jpg";
+import ekl15Overview from "@/assets/genset-small-C07x-piZ.jpg";
+import ekl15Alternator from "@/assets/dg-alternator.jpg";
+import ekl15Dimensions from "@/assets/dg-dimensions.jpg";
+
+export const EKL15_SHOWCASE: ShowcaseProduct = {
+  slug: "ekl-15-2cyl",
+  name: "EKL 15 kVA (2 Cyl) DG Set",
+  kva: 15,
+  range: "15-62.5",
+  status: "active",
+  thumbnail: ekl15Overview,
+  hero: ekl15Overview,
+  hotspots: [
+    {
+      id: "engine",
+      x: 42, y: 55,
+      title: "Escorts G15-IV Engine",
+      description: "2-cylinder, naturally aspirated, air-cooled diesel engine with electronic governor for stable frequency.",
+      specs: [
+        { label: "Cylinders", value: "2 inline" },
+        { label: "Displacement", value: "1.56 L" },
+        { label: "Bore × Stroke", value: "95 × 110 mm" },
+      ],
+    },
+    {
+      id: "alternator",
+      x: 25, y: 48,
+      title: "Stamford Alternator",
+      description: "Brushless, self-excited single-bearing alternator with double layer concentric winding for clean power.",
+      specs: [
+        { label: "Output", value: "15 kVA / 12 kWe" },
+        { label: "Voltage", value: "415 V, 3-phase" },
+        { label: "PF", value: "0.8 lagging" },
+      ],
+    },
+    {
+      id: "control",
+      x: 75, y: 35,
+      title: "DEIF SGC 120 Controller",
+      description: "Microprocessor-based digital controller with AMF, CANbus engine interface, and LCD display.",
+      specs: [
+        { label: "Make", value: "DEIF, Denmark" },
+        { label: "Model", value: "SGC 120" },
+        { label: "Comms", value: "USB / RS-485" },
+      ],
+    },
+    {
+      id: "enclosure",
+      x: 85, y: 58,
+      title: "Acoustic Enclosure",
+      description: "CPCB IV compliant acoustic enclosure — silent operation for residential and commercial sites.",
+      specs: [
+        { label: "Sound", value: "70 dB(A) @ 1m" },
+        { label: "Compliance", value: "CPCB IV" },
+        { label: "Protection", value: "IP23" },
+      ],
+    },
+    {
+      id: "fuel",
+      x: 50, y: 78,
+      title: "Fuel & Lubrication",
+      description: "High-speed diesel engine with full flow oil filter and lube oil cooling for optimum temperature control.",
+      specs: [
+        { label: "Fuel", value: "4.1 L/h @ 100%" },
+        { label: "Lube Oil", value: "15W40 CI4" },
+        { label: "Oil Capacity", value: "5.5 L" },
+      ],
+    },
+  ],
+  sections: [
+    {
+      id: "overview",
+      number: "01",
+      title: "EKL 15 kVA Silent DG Set",
+      tagline: "Compact power, CPCB IV compliant — built for demanding environments.",
+      image: ekl15Overview,
+      alt: "ATM EKL 15 kVA 2-cylinder silent diesel generator",
+      specs: [
+        { label: "Model", value: "EKL15-IV (2 Cyl)" },
+        { label: "Rating", value: "15 kVA / 12 kWe" },
+        { label: "Compliance", value: "CPCB IV" },
+      ],
+      highlight: [
+        { value: 15, suffix: " kVA", label: "Prime power" },
+        { value: 70, suffix: " dB(A)", label: "Sound @ 1m" },
+        { value: 27, suffix: "+ yrs", label: "Heritage" },
+      ],
+    },
+    {
+      id: "engine",
+      number: "02",
+      title: "Engine",
+      tagline: "Escorts G15-IV — 2-cylinder, naturally aspirated, built for reliability.",
+      image: ekl15Engine,
+      alt: "Escorts 2-cylinder diesel engine",
+      specs: [
+        { label: "Make", value: "Escorts" },
+        { label: "Model", value: "G15-IV" },
+        { label: "Configuration", value: "2-cylinder inline" },
+        { label: "Aspiration", value: "Natural aspiration" },
+        { label: "Displacement", value: "1.56 L" },
+        { label: "Bore × Stroke", value: "95 × 110 mm" },
+        { label: "Cooling", value: "Air cooled" },
+        { label: "Speed", value: "1500 RPM" },
+        { label: "Gross Power (PRP)", value: "14.1 kWm / 19 hp" },
+      ],
+    },
+    {
+      id: "power",
+      number: "03",
+      title: "Power Output",
+      tagline: "Stable 3-phase power at 415 V / 50 Hz for sensitive loads.",
+      image: ekl15Alternator,
+      alt: "Stamford brushless alternator",
+      specs: [
+        { label: "Make", value: "Stamford" },
+        { label: "Frame", value: "S0L1-P1" },
+        { label: "Rating", value: "15 kVA / 12 kWe" },
+        { label: "Voltage", value: "415 V (L-L)" },
+        { label: "Current", value: "20.88 A" },
+        { label: "Frequency", value: "50 Hz" },
+        { label: "Phase", value: "3-phase, 1/3" },
+        { label: "Power Factor", value: "0.8 lagging" },
+        { label: "Insulation", value: "H Class" },
+        { label: "Efficiency @ 75%", value: "86.4%" },
+        { label: "Efficiency @ 100%", value: "83.5%" },
+      ],
+    },
+    {
+      id: "sound",
+      number: "04",
+      title: "Sound & Enclosure",
+      tagline: "CPCB IV compliant. Designed for residential and commercial sites.",
+      image: ekl15Overview,
+      alt: "Acoustic enclosure of EKL 15 generator",
+      specs: [
+        { label: "Sound level", value: "70 dB(A) @ 1m" },
+        { label: "Compliance", value: "CPCB IV" },
+        { label: "Protection", value: "IP23" },
+        { label: "Design Ambient", value: "40°C" },
+        { label: "Altitude", value: "Up to 1000 m" },
+        { label: "Cooling airflow", value: "0.58 m³/sec" },
+      ],
+    },
+    {
+      id: "control",
+      number: "05",
+      title: "Control Panel",
+      tagline: "DEIF SGC 120 — Advanced microprocessor controller with AMF & CANbus.",
+      image: ekl15Control,
+      alt: "DEIF SGC 120 digital genset controller",
+      specs: [
+        { label: "Controller", value: "DEIF SGC 120" },
+        { label: "Display", value: "LCD backlit, full graphics" },
+        { label: "Operation", value: "Auto / Manual / Remote" },
+        { label: "AMF", value: "Supported" },
+        { label: "Comms", value: "USB / RS-485 / CANbus" },
+        { label: "Protection", value: "IP65 with gasket" },
+        { label: "Operating Temp", value: "-20 to 65°C" },
+        { label: "Event Log", value: "100 events" },
+      ],
+    },
+    {
+      id: "dimensions",
+      number: "06",
+      title: "Dimensions & Weight",
+      tagline: "Compact footprint — easy to site, transport and service.",
+      image: ekl15Dimensions,
+      alt: "EKL 15 generator side profile with dimensions",
+      specs: [
+        { label: "Length", value: "1760 mm" },
+        { label: "Width", value: "950 mm" },
+        { label: "Height", value: "1495 mm" },
+        { label: "Dry weight", value: "~70 kg (open set)" },
+        { label: "Day fuel tank", value: "Included" },
+        { label: "Lube oil", value: "15W40 CI4, 5.5 L" },
+      ],
+    },
+  ],
+};
+

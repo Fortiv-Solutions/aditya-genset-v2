@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, Home, Box, Monitor } from "lucide-react";
+import { Menu, X, Home, Box, Monitor, LayoutDashboard } from "lucide-react";
 import logo from "@/assets/brand/aditya-logo.png";
 
 const links = [

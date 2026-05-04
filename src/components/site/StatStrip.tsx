@@ -1,11 +1,12 @@
-import { CountUp } from "./CountUp";
 import { SectionReveal, StaggerReveal } from "./SectionReveal";
+import { EditableText } from "@/components/cms/EditableText";
+import { useCMSState } from "@/components/cms/CMSEditorProvider";
 
-const stats = [
-  { value: 27, suffix: "+", label: "Years of trust" },
-  { value: 500, suffix: " kVA", label: "Up to" },
-  { value: 36, suffix: "+", label: "Models in catalog" },
-];
+const STAT_KEYS = [
+  { valueKey: "stat1Value", labelKey: "stat1Label" },
+  { valueKey: "stat2Value", labelKey: "stat2Label" },
+  { valueKey: "stat3Value", labelKey: "stat3Label" },
+] as const;
 
 export function StatStrip() {
   return (
@@ -16,16 +17,16 @@ export function StatStrip() {
           staggerMs={80}
           threshold={0.1}
         >
-          {stats.map((s) => (
+          {STAT_KEYS.map((s) => (
             <div
-              key={s.label}
+              key={s.valueKey}
               className="flex flex-col items-start gap-2 bg-white p-6 md:p-8 transition-colors hover:bg-secondary/40"
             >
               <div className="num-display text-2xl font-bold text-foreground md:text-3xl">
-                <CountUp end={s.value} suffix={s.suffix} decimals={0} />
+                <EditableText section="statStrip" contentKey={s.valueKey} />
               </div>
               <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:text-xs">
-                {s.label}
+                <EditableText section="statStrip" contentKey={s.labelKey} />
               </div>
               <div className="h-0.5 w-8 bg-amber-gradient" />
             </div>

@@ -1,18 +1,7 @@
 import { SectionReveal, StaggerReveal } from "./SectionReveal";
 import { Target, Lightbulb, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
-
-const MISSION_ITEMS = [
-  "Deliver high-quality products and services",
-  "Be cost-competitive",
-  "Serve all power needs: Baseload, Standby, Critical standby",
-];
-
-const VISION_ITEMS = [
-  "Become a benchmark in the power industry",
-  "Provide world-class products",
-  "Driven by: Integrity, Teamwork, Continuous improvement",
-];
+import { EditableText } from "@/components/cms/EditableText";
 
 export function MissionVision() {
   return (
@@ -35,17 +24,19 @@ export function MissionVision() {
                   <Target size={32} />
                 </div>
                 <h2 className="font-display text-3xl font-bold text-foreground md:text-4xl">
-                  Our Mission
+                  <EditableText section="missionVision" contentKey="missionTitle" />
                 </h2>
                 
-                <StaggerReveal className="mt-8 space-y-4" staggerMs={100}>
-                  {MISSION_ITEMS.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
+                <div className="mt-8 space-y-4">
+                  {(["missionItem1", "missionItem2", "missionItem3"] as const).map((key) => (
+                    <div key={key} className="flex items-start gap-3">
                       <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-accent" />
-                      <p className="text-muted-foreground text-lg">{item}</p>
+                      <p className="text-muted-foreground text-lg">
+                        <EditableText section="missionVision" contentKey={key} />
+                      </p>
                     </div>
                   ))}
-                </StaggerReveal>
+                </div>
               </div>
             </motion.div>
           </SectionReveal>
@@ -65,17 +56,19 @@ export function MissionVision() {
                   <Lightbulb size={32} />
                 </div>
                 <h2 className="font-display text-3xl font-bold md:text-4xl">
-                  Our Vision
+                  <EditableText section="missionVision" contentKey="visionTitle" />
                 </h2>
                 
-                <StaggerReveal className="mt-8 space-y-4" staggerMs={100}>
-                  {VISION_ITEMS.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
+                <div className="mt-8 space-y-4">
+                  {(["visionItem1", "visionItem2", "visionItem3"] as const).map((key) => (
+                    <div key={key} className="flex items-start gap-3">
                       <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-accent" />
-                      <p className="text-white/80 text-lg">{item}</p>
+                      <p className="text-white/80 text-lg">
+                        <EditableText section="missionVision" contentKey={key} />
+                      </p>
                     </div>
                   ))}
-                </StaggerReveal>
+                </div>
               </div>
             </motion.div>
           </SectionReveal>
